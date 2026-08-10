@@ -1,0 +1,13 @@
+__pycache__/
+.venv/
+*.pyc
+.pytest_cache/
+data/raw/*.csv
+data/processed/*.csv
+models/*.joblib
+models/*.json
+results/*.csv
+results/*.png
+edge/exported/*.joblib
+edge/exported/*.onnx
+.ipynb_checkpoints/

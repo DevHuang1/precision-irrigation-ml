@@ -1,0 +1,146 @@
+{
+  "generated_at": "2026-08-10 15:24",
+  "best_model": "logistic_regression",
+  "plots": [
+    {
+      "plot_id": "control",
+      "growth_stage": "maturity",
+      "growth_stage_label": "Fruiting / maturity",
+      "days_since_planting": 90,
+      "current": {
+        "timestamp": "2025-08-30 05:30:00",
+        "soil_moisture_pct": 55.3,
+        "soil_temp_c": 21.5,
+        "air_temp_c": 16.9,
+        "air_humidity_pct": 59.1,
+        "rainfall_mm_24h": 0.0
+      },
+      "recommendation": {
+        "action": "wait",
+        "label": "No watering needed",
+        "confidence": 1.0,
+        "confidence_label": "100% sure",
+        "reason": "Soil moisture is 55% \u2014 your crops have enough water for now.",
+        "suggested_water_l": 0.0
+      },
+      "stage_tip": "Fruiting stage: ease off slightly, but do not let soil dry out.",
+      "moisture_trend": [
+        {
+          "day": "Aug 24",
+          "soil_moisture_pct": 37.6
+        },
+        {
+          "day": "Aug 25",
+          "soil_moisture_pct": 35.2
+        },
+        {
+          "day": "Aug 26",
+          "soil_moisture_pct": 32.6
+        },
+        {
+          "day": "Aug 27",
+          "soil_moisture_pct": 51.0
+        },
+        {
+          "day": "Aug 28",
+          "soil_moisture_pct": 63.1
+        },
+        {
+          "day": "Aug 29",
+          "soil_moisture_pct": 58.5
+        },
+        {
+          "day": "Aug 30",
+          "soil_moisture_pct": 60.5
+        }
+      ],
+      "recent_irrigations": [
+        {
+          "timestamp": "2025-08-06 05:30:00",
+          "water_applied_l": 900.6
+        },
+        {
+          "timestamp": "2025-08-15 10:00:00",
+          "water_applied_l": 1144.1
+        },
+        {
+          "timestamp": "2025-08-27 10:30:00",
+          "water_applied_l": 1124.4
+        }
+      ]
+    },
+    {
+      "plot_id": "treatment",
+      "growth_stage": "maturity",
+      "growth_stage_label": "Fruiting / maturity",
+      "days_since_planting": 90,
+      "current": {
+        "timestamp": "2025-08-30 05:30:00",
+        "soil_moisture_pct": 61.8,
+        "soil_temp_c": 21.5,
+        "air_temp_c": 16.9,
+        "air_humidity_pct": 59.1,
+        "rainfall_mm_24h": 0.0
+      },
+      "recommendation": {
+        "action": "wait",
+        "label": "No watering needed",
+        "confidence": 1.0,
+        "confidence_label": "100% sure",
+        "reason": "Soil moisture is 62% \u2014 your crops have enough water for now.",
+        "suggested_water_l": 0.0
+      },
+      "stage_tip": "Fruiting stage: ease off slightly, but do not let soil dry out.",
+      "moisture_trend": [
+        {
+          "day": "Aug 24",
+          "soil_moisture_pct": 39.8
+        },
+        {
+          "day": "Aug 25",
+          "soil_moisture_pct": 37.8
+        },
+        {
+          "day": "Aug 26",
+          "soil_moisture_pct": 36.3
+        },
+        {
+          "day": "Aug 27",
+          "soil_moisture_pct": 32.7
+        },
+        {
+          "day": "Aug 28",
+          "soil_moisture_pct": 57.5
+        },
+        {
+          "day": "Aug 29",
+          "soil_moisture_pct": 62.4
+        },
+        {
+          "day": "Aug 30",
+          "soil_moisture_pct": 60.6
+        }
+      ],
+      "recent_irrigations": [
+        {
+          "timestamp": "2025-08-06 16:30:00",
+          "water_applied_l": 1060.0
+        },
+        {
+          "timestamp": "2025-08-16 11:30:00",
+          "water_applied_l": 1151.8
+        },
+        {
+          "timestamp": "2025-08-28 06:00:00",
+          "water_applied_l": 1044.4
+        }
+      ]
+    }
+  ],
+  "tips": [
+    "Water in the early morning or evening to reduce evaporation.",
+    "Check drips and emitters before you start watering.",
+    "If rain is expected soon, you can safely skip today's watering.",
+    "Keeping soil moisture steady beats big swings between wet and dry."
+  ]
+}
