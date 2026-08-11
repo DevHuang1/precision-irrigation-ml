@@ -1,0 +1,28 @@
+{
+  "$schema": "https://app.kilo.ai/config.json",
+  "model": "kilo/builtin/claude-sonnet-4",
+  "small_model": "kilo/builtin/claude-3-5-haiku",
+  "default_agent": "ml-engineer",
+  "snapshot": true,
+  "instructions": ["AGENTS.md"],
+  "skills": {
+    "paths": ["./my-skills"]
+  },
+  "permission": {
+    "bash": "allow",
+    "edit": {
+      "src/**": "allow",
+      "tests/**": "allow",
+      "data/**/*.py": "allow",
+      "*.md": "allow",
+      "dashboard/**": "allow",
+      ".kilo/**": "allow",
+      "edge/**": "allow",
+      "models/*": "deny",
+      "*.lock": "deny",
+      "*": "ask"
+    },
+    "read": "allow",
+    "external_directory": "deny"
+  }
+}

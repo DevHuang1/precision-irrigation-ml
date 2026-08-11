@@ -4,11 +4,28 @@ import { repoPath } from "@/lib/csv";
 
 export const dynamic = "force-dynamic";
 
-const FILE = repoPath("results", "sim_model.json");
+const DEFAULT_FILE = repoPath("results", "sim_model.json");
 
-export async function GET() {
+function loadModel(path: string) {
   try {
-    const sim = JSON.parse(readFileSync(FILE, "utf-8"));
+    return JSON.parse(readFileSync(path, "utf-8"));
+  } catch {
+    return null;
+  }
+}
+
+export async function GET(request: Request) {
+  const url = new URL(request.url);
+  const datasetId = url.searchParams.get("dataset") || "synthetic";
+
+  if (datasetId !== "synthetic") {
+    const dsFile = repoPath("results", `sim_model_${datasetId}.json`);
+    const dsModel = loadModel(dsFile);
+    if (dsModel) return NextResponse.json(dsModel);
+  }
+
+  try {
+    const sim = JSON.parse(readFileSync(DEFAULT_FILE, "utf-8"));
     return NextResponse.json(sim);
   } catch {
     return NextResponse.json(

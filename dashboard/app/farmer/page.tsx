@@ -7,8 +7,9 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from "recharts";
-import Nav from "@/components/Nav";
+
 import Simulator, { DefaultConditions } from "@/components/Simulator";
+import { GlassCard } from "@/components/GlassCard";
 
 type Current = {
   timestamp: string;
@@ -33,6 +34,7 @@ type Plot = {
   growth_stage: string;
   growth_stage_label: string;
   days_since_planting: number;
+  soil_type: string;
   current: Current;
   recommendation: Recommendation;
   stage_tip: string;
@@ -69,6 +71,7 @@ export default function FarmerView() {
   const [sim, setSim] = useState<SimModel | null>(null);
   const [simMode, setSimMode] = useState(false);
   const [simPlot, setSimPlot] = useState<string>("");
+  const [datasetId, setDatasetId] = useState("synthetic");
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -88,6 +91,15 @@ export default function FarmerView() {
       .catch((e) => setError(e instanceof Error ? e.message : String(e)));
   }, []);
 
+  useEffect(() => {
+    if (!simMode) return;
+    fetch(`/api/sim-model?datasetId=${encodeURIComponent(datasetId)}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .catch(() => null)
+      .then((s) => setSim(s))
+      .catch(() => {});
+  }, [datasetId, simMode]);
+
   const activePlot = feed?.plots.find((p) => p.plot_id === simPlot) ?? feed?.plots[0];
 
   const simDefaults: DefaultConditions | null = activePlot
@@ -100,29 +112,28 @@ export default function FarmerView() {
         rainfall_mm_24h: activePlot.current.rainfall_mm_24h,
         days_since_planting: activePlot.days_since_planting,
         growth_stage: activePlot.growth_stage,
+        soil_type: activePlot.soil_type,
         suggested_water_l: activePlot.recommendation.suggested_water_l,
       }
     : null;
 
   if (error) {
     return (
-      <main className="min-h-screen bg-zinc-50 p-6 font-sans">
-        <Nav />
+    <div className="relative z-10 min-h-screen p-6 font-sans">
         <div className="mx-auto max-w-4xl rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-700">
           {error}
         </div>
-      </main>
+      </div>
     );
   }
 
   if (!feed) {
     return (
-      <main className="min-h-screen bg-zinc-50 p-6 font-sans">
-        <Nav />
-        <p className="mx-auto max-w-4xl text-sm text-zinc-500">
+    <div className="relative z-10 min-h-screen p-6 font-sans">
+        <p className="mx-auto max-w-4xl text-sm text-slate-500">
           Loading your daily irrigation guidance…
         </p>
-      </main>
+      </div>
     );
   }
 
@@ -130,16 +141,15 @@ export default function FarmerView() {
   const allGood = feed.plots.filter((p) => p.recommendation.action === "wait");
 
   return (
-    <main className="min-h-screen bg-zinc-50 p-6 font-sans">
+    <div className="relative z-10 min-h-screen p-6 font-sans">
       <div className="mx-auto max-w-4xl">
-        <Nav />
 
         <header className="mb-6 flex flex-wrap items-start justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-zinc-900">
+            <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">
               Good morning, farmer
             </h1>
-            <p className="mt-1 text-sm text-zinc-500">
+            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
               Here is what to do with your crops today. Updated{" "}
               {feed.generated_at}.
             </p>
@@ -147,10 +157,10 @@ export default function FarmerView() {
           {sim && (
             <button
               onClick={() => setSimMode((v) => !v)}
-              className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
+              className={`rounded-full px-4 py-2 text-sm font-semibold transition-all ${
                 simMode
-                  ? "bg-blue-600 text-white"
-                  : "border border-blue-600 text-blue-600 hover:bg-blue-50"
+                  ? "bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-[0_4px_20px_-2px_rgba(16,185,129,0.3)] active:scale-95"
+                  : "border border-emerald-600/30 dark:border-emerald-500/40 text-emerald-600 dark:text-emerald-400 hover:bg-white/30 dark:hover:bg-emerald-950/30 active:scale-95"
               }`}
             >
               {simMode ? "Exit simulation mode" : "Simulation mode"}
@@ -159,71 +169,89 @@ export default function FarmerView() {
         </header>
 
         {simMode ? (
-          <section className="mb-8">
-            <div className="mb-4 flex items-center gap-3">
-              <label className="text-sm font-medium text-zinc-700">
-                Start from plot
+          <section className="mb-8 space-y-4">
+            <div className="flex flex-wrap items-center gap-3">
+              <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                Dataset context
               </label>
               <select
-                value={simPlot}
-                onChange={(e) => setSimPlot(e.target.value)}
-                className="rounded-lg border border-zinc-300 bg-white px-3 py-1.5 text-sm capitalize text-zinc-800"
+                value={datasetId}
+                onChange={(e) => setDatasetId(e.target.value)}
+                className="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-1.5 text-sm capitalize text-slate-800 dark:text-slate-100"
               >
-                {feed.plots.map((p) => (
-                  <option key={p.plot_id} value={p.plot_id}>
-                    {p.plot_id}
+                {[
+                  { id: "synthetic", label: "Synthetic (demo)" },
+                  { id: "fbk", label: "FBK Soil Moisture" },
+                  { id: "zenodo", label: "Zenodo Cotton" },
+                  { id: "unipr", label: "UniPR Tomato" },
+                  { id: "unipr_evolving", label: "UniPR Evolving" },
+                ].map((d) => (
+                  <option key={d.id} value={d.id}>
+                    {d.label}
                   </option>
                 ))}
               </select>
+              <span className="text-xs text-slate-500 dark:text-slate-400">
+                Switch dataset to see different starting conditions
+              </span>
             </div>
             {sim && simDefaults && !sim.error && (
-              <Simulator sim={sim} defaults={simDefaults} />
+              <Simulator
+                sim={sim}
+                defaults={simDefaults}
+                datasetId={datasetId}
+                onDatasetChange={setDatasetId}
+              />
             )}
             {sim?.error && (
-              <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
+              <div className="rounded-xl border border-amber-200 dark:border-amber-900/50 bg-amber-50 dark:bg-amber-950/40 px-4 py-3 text-sm text-amber-700 dark:text-amber-300">
                 {sim.error}
               </div>
             )}
           </section>
         ) : (
           <>
-          <section className="mb-8 rounded-2xl bg-gradient-to-r from-emerald-600 to-green-500 p-6 text-white shadow-sm">
-          <p className="text-sm font-medium text-emerald-100">Today&apos;s summary</p>
-          <p className="mt-1 text-2xl font-bold leading-snug">
-            {needsWater.length === 0
-              ? "No watering needed today — your soil has enough water."
-              : `${needsWater.length} of ${feed.plots.length} plots need watering today.`}
-          </p>
-          <p className="mt-2 text-sm text-emerald-50">
-            {allGood.length > 0 &&
-              `${allGood.map((p) => p.plot_id).join(" and ")} can wait. `}
-            {needsWater.length > 0 &&
-              `Start with ${needsWater.map((p) => p.plot_id).join(" and ")}.`}
-            Water in the early morning or evening to save water.
-          </p>
-        </section>
+          <section className="mb-8">
+            <GlassCard variant="medium" padding="lg">
+              <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Today&apos;s summary</p>
+              <p className="mt-1 text-2xl font-bold leading-snug text-slate-900 dark:text-slate-100">
+                {needsWater.length === 0
+                  ? "No watering needed today — your soil has enough water."
+                  : `${needsWater.length} of ${feed.plots.length} plots need watering today.`}
+              </p>
+              <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                {allGood.length > 0 &&
+                  `${allGood.map((p) => p.plot_id).join(" and ")} can wait. `}
+                {needsWater.length > 0 &&
+                  `Start with ${needsWater.map((p) => p.plot_id).join(" and ")}.`}
+                Water in the early morning or evening to save water.
+              </p>
+             </GlassCard>
+            </section>
 
-        <section className="mb-8 grid grid-cols-1 gap-6">
-          {feed.plots.map((plot) => (
-            <PlotCard key={plot.plot_id} plot={plot} />
-          ))}
-        </section>
+            <section className="mb-8 grid grid-cols-1 gap-6">
+              {feed.plots.map((plot) => (
+                <PlotCard key={plot.plot_id} plot={plot} />
+              ))}
+            </section>
 
-        <section className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
-          <h2 className="text-lg font-semibold text-zinc-900">Handy watering tips</h2>
-          <ul className="mt-3 space-y-2 text-sm text-zinc-700">
-            {feed.tips.map((tip, i) => (
-              <li key={i} className="flex gap-2">
-                <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-green-500" />
-                {tip}
-              </li>
-            ))}
-          </ul>
-        </section>
+            <section>
+              <GlassCard variant="medium" padding="lg">
+                <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Handy watering tips</h2>
+              <ul className="mt-3 space-y-2 text-sm text-slate-700 dark:text-slate-300">
+                {feed.tips.map((tip, i) => (
+                  <li key={i} className="flex gap-2">
+                    <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-green-500" />
+                    {tip}
+                  </li>
+                ))}
+              </ul>
+              </GlassCard>
+            </section>
           </>
         )}
       </div>
-    </main>
+    </div>
   );
 }
 
@@ -231,17 +259,17 @@ function PlotCard({ plot }: { plot: Plot }) {
   const { recommendation: rec, current } = plot;
   const irrigate = rec.action === "irrigate";
   return (
-    <article className="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm">
+    <GlassCard variant="medium" padding="none">
       <div
         className={`flex flex-wrap items-center justify-between gap-4 px-6 py-4 ${
-          irrigate ? "bg-amber-50" : "bg-emerald-50"
+          irrigate ? "bg-amber-50/80 dark:bg-amber-950/40" : "bg-emerald-50/80 dark:bg-emerald-950/40"
         }`}
       >
         <div>
-          <h3 className="text-lg font-bold capitalize text-zinc-900">
+          <h3 className="text-lg font-bold capitalize text-slate-900 dark:text-slate-100">
             {plot.plot_id} plot
           </h3>
-          <p className="text-sm text-zinc-500">
+          <p className="text-sm text-slate-500 dark:text-slate-400">
             {plot.growth_stage_label} · day {plot.days_since_planting}
           </p>
         </div>
@@ -257,23 +285,23 @@ function PlotCard({ plot }: { plot: Plot }) {
 
       <div className="grid grid-cols-1 gap-6 p-6 md:grid-cols-2">
         <div className="space-y-4">
-          <p className="text-base text-zinc-700">{rec.reason}</p>
+          <p className="text-base text-slate-700 dark:text-slate-300">{rec.reason}</p>
 
           {irrigate ? (
-            <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3">
-              <p className="text-sm text-amber-700">
+            <div className="rounded-xl border border-amber-200 dark:border-amber-900/50 bg-amber-50 dark:bg-amber-950/30 px-4 py-3">
+              <p className="text-sm text-amber-700 dark:text-amber-300">
                 Suggested amount:{" "}
-                <span className="text-xl font-bold text-amber-800">
+                <span className="text-xl font-bold text-amber-800 dark:text-amber-200">
                   ~{rec.suggested_water_l} L
                 </span>{" "}
                 per watering event.
               </p>
-              <p className="mt-1 text-xs text-amber-600">
+              <p className="mt-1 text-xs text-amber-600 dark:text-amber-400">
                 {rec.confidence_label} the model expects irrigation is needed.
               </p>
             </div>
           ) : (
-            <p className="text-xs text-zinc-400">
+            <p className="text-xs text-slate-400 dark:text-slate-500">
               Model confidence: {rec.confidence_label}.
             </p>
           )}
@@ -286,12 +314,12 @@ function PlotCard({ plot }: { plot: Plot }) {
             <Reading label="Air humidity" value={`${current.air_humidity_pct}%`} />
           </div>
 
-          <p className="text-xs italic text-zinc-500">{plot.stage_tip}</p>
+          <p className="text-xs italic text-slate-500 dark:text-slate-400">{plot.stage_tip}</p>
         </div>
 
         <div className="space-y-4">
-          <div className="rounded-xl border border-zinc-100 bg-zinc-50 p-4">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">
+          <GlassCard variant="thin" padding="md" className="space-y-4">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
               Soil moisture — last 7 days
             </p>
             <div className="h-32">
@@ -303,41 +331,41 @@ function PlotCard({ plot }: { plot: Plot }) {
                   />
                   <defs>
                     <linearGradient id={`moist-${plot.plot_id}`} x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#2563eb" stopOpacity={0.35} />
-                      <stop offset="100%" stopColor="#2563eb" stopOpacity={0.02} />
+                      <stop offset="0%" stopColor="#10b981" stopOpacity={0.35} />
+                      <stop offset="100%" stopColor="#10b981" stopOpacity={0.02} />
                     </linearGradient>
                   </defs>
                   <Area
                     type="monotone"
                     dataKey="soil_moisture_pct"
-                    stroke="#2563eb"
+                    stroke="#10b981"
                     strokeWidth={2}
                     fill={`url(#moist-${plot.plot_id})`}
                   />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
-          </div>
+          </GlassCard>
 
           {plot.recent_irrigations.length > 0 && (
-            <div className="rounded-xl border border-zinc-100 bg-zinc-50 p-4">
-              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">
+            <GlassCard variant="thin" padding="md">
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
                 Last watering
               </p>
               {plot.recent_irrigations
                 .slice(-2)
                 .reverse()
                 .map((ev, i) => (
-                  <p key={i} className="text-sm text-zinc-600">
+                  <p key={i} className="text-sm text-slate-600 dark:text-slate-300">
                     {ev.timestamp.slice(0, 16).replace("T", " ")} —{" "}
                     {ev.water_applied_l} L
                   </p>
                 ))}
-            </div>
+            </GlassCard>
           )}
         </div>
       </div>
-    </article>
+    </GlassCard>
   );
 }
 
@@ -351,19 +379,19 @@ function Reading({
   tone?: "green" | "amber";
 }) {
   return (
-    <div className="rounded-lg border border-zinc-100 px-3 py-2">
-      <p className="text-[11px] uppercase tracking-wide text-zinc-400">{label}</p>
+    <GlassCard variant="thin" padding="sm">
+      <p className="text-[11px] uppercase tracking-wide text-slate-400 dark:text-slate-500">{label}</p>
       <p
         className={`text-lg font-semibold ${
           tone === "green"
-            ? "text-emerald-600"
+            ? "text-emerald-600 dark:text-emerald-400"
             : tone === "amber"
-              ? "text-amber-600"
-              : "text-zinc-800"
+              ? "text-amber-600 dark:text-amber-400"
+              : "text-slate-800 dark:text-slate-200"
         }`}
       >
         {value}
       </p>
-    </div>
+    </GlassCard>
   );
 }

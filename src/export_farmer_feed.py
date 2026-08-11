@@ -40,6 +40,9 @@ STAGE_SUGGESTION = {
     "maturity": "Fruiting stage: ease off slightly, but do not let soil dry out.",
 }
 
+SOIL_FACTORS = {"sandy": 0.7, "loamy": 1.0, "clay": 1.3}
+TARGET_MOISTURE = {"establishment": 65, "vegetative": 60, "flowering": 62, "maturity": 55}
+
 
 def _stage_name(row: pd.Series) -> str:
     for s in GROWTH_STAGES:
@@ -137,11 +140,17 @@ def export_farmer_feed(processed_path: Path | str = PROCESSED_PATH,
         stage = _stage_name(row)
         confidence = float(prob if pred == 1 else 1.0 - prob)
         action = "irrigate" if pred == 1 else "wait"
+        soil_type = "loamy"
+        target = TARGET_MOISTURE.get(stage, 60)
+        deficit = max(0, target - float(row["soil_moisture_pct"]))
+        factor = SOIL_FACTORS.get(soil_type, 1.0)
+        suggested = round(deficit * factor * 1.2, 1) if action == "irrigate" else 0.0
         plots.append({
             "plot_id": str(row["plot_id"]),
             "growth_stage": stage,
             "growth_stage_label": STAGE_LABELS[stage],
             "days_since_planting": int(row["days_since_planting"]),
+            "soil_type": soil_type,
             "current": {
                 "timestamp": str(row["timestamp"]),
                 "soil_moisture_pct": round(float(row["soil_moisture_pct"]), 1),
@@ -158,8 +167,7 @@ def export_farmer_feed(processed_path: Path | str = PROCESSED_PATH,
                 "confidence_label": (f"{confidence * 100:.0f}% sure" if
                                      confidence >= 0.6 else "less certain"),
                 "reason": _reason(pred, prob, row),
-                "suggested_water_l": (water_by_stage[stage] if pred == 1
-                                      else 0.0),
+                "suggested_water_l": suggested,
             },
             "stage_tip": STAGE_SUGGESTION[stage],
             "moisture_trend": _daily_trend(df, str(row["plot_id"])),

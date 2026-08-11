@@ -8,6 +8,7 @@ unavailable or readings are out of range (safety fallback from Section 5.5).
 
 from __future__ import annotations
 
+
 import sys
 from pathlib import Path
 

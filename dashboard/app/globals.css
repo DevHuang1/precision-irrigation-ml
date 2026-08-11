@@ -1,26 +1,167 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:where(.dark, .dark *));
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  @font-face {
+    font-family: "SF Pro";
+    src: url("https://fonts.gstatic.com/s/sfprodisplay/variable/sf-pro-display-variable.woff2") format("woff2-variations");
+    font-weight: 100 900;
+    font-style: normal;
+  }
 
-@media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #f8fafc;
+    --foreground: #0f172a;
+  }
+
+  .dark {
+    --background: #090d16;
+    --foreground: #f8fafc;
+  }
+
+  html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", "Inter", system-ui, sans-serif;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    font-variant-numeric: tabular-nums;
+    font-size: 0.9375rem;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", "Inter", system-ui, sans-serif;
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .backdrop-blur {
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+    .bg-white\/70 {
+      background-color: rgba(255, 255, 255, 0.95);
+    }
+    .dark .bg-slate-900\/75 {
+      background-color: rgba(15, 23, 32, 0.98);
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+  /* Liquid Glass Material Variables — matched to the Apple Liquid Glass skill */
+  :root {
+    /* Thin Glass: floating toolbar, context menus */
+    --glass-thin-light: rgba(255, 255, 255, 0.45);
+    --glass-thin-dark: rgba(15, 17, 23, 0.55);
+    --glass-thin-blur: blur(20px);
+    --glass-thin-saturate: saturate(180%);
+    --glass-thin-border: rgba(255, 255, 255, 0.30);
+    --glass-thin-rim: rgba(255, 255, 255, 0.60);
+
+    /* Medium Glass: modal sheets, cards */
+    --glass-medium-light: rgba(255, 255, 255, 0.70);
+    --glass-medium-dark: rgba(22, 25, 35, 0.75);
+    --glass-medium-blur: blur(32px);
+    --glass-medium-saturate: saturate(160%);
+    --glass-medium-border: rgba(255, 255, 255, 0.15);
+    --glass-medium-rim: rgba(255, 255, 255, 0.50);
+    --glass-medium-shadow: rgba(0, 0, 0, 0.30);
+
+    /* Thick Glass: sidebar, nav panels */
+    --glass-thick-light: rgba(248, 249, 252, 0.88);
+    --glass-thick-dark: rgba(10, 12, 16, 0.92);
+    --glass-thick-blur: blur(48px);
+    --glass-thick-saturate: saturate(140%);
+    --glass-thick-border: rgba(255, 255, 255, 0.08);
+  }
+
+  /* Squircle corners — supported natively on WebKit, polyfilled via clip-path */
+  .squircle {
+    corner-shape: squircle;
+    border-start-start-radius: 18px;
+    border-start-end-radius: 18px;
+    border-end-start-radius: 18px;
+    border-end-end-radius: 18px;
+  }
+
+  .squircle-sm {
+    corner-shape: squircle;
+    border-start-start-radius: 12px;
+    border-start-end-radius: 12px;
+    border-end-start-radius: 12px;
+    border-end-end-radius: 12px;
+  }
+
+  .squircle-lg {
+    corner-shape: squircle;
+    border-start-start-radius: 24px;
+    border-start-end-radius: 24px;
+    border-end-start-radius: 24px;
+    border-end-end-radius: 24px;
+  }
+
+  /* Specular highlight utilities — top rim key light */
+  .glass-specular {
+    box-shadow: inset 0 1px 0 0 var(--glass-medium-rim);
+  }
+
+  .glass-rim-ambient {
+    box-shadow: inset 0 -1px 0 0 var(--glass-medium-shadow);
+  }
+
+  /* Tabular numerics for data display */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Subtle noise texture for depth — applied via pseudo-element */
+  .noise {
+    mask-image: url("/noise.svg");
+    mask-repeat: repeat;
+    mask-size: 200px;
+    opacity: 0.015;
+    pointer-events: none;
+  }
+
+  .dark .noise {
+    opacity: 0.025;
+  }
+
+  /* Focus rings — crisp, high-contrast, keyboard-first */
+  :focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--ring, #10b981), transparent 20%);
+    outline-offset: 2px;
+  }
+
+  /* Scrollbar — subtle, glass-aware */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.25);
+    border-radius: 9999px;
+    border: 0.5px solid rgba(255, 255, 255, 0.1);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(148, 163, 184, 0.45);
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(148, 163, 184, 0.25) transparent;
+  }
 }
