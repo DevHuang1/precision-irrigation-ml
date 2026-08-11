@@ -458,11 +458,129 @@ def convert_unipr_tomato_evolving() -> pd.DataFrame:
     return df
 
 
+def convert_kaggle_orig_irrigation() -> pd.DataFrame:
+    """Kaggle 'Irrigation Prediction' — static agronomic records.
+
+    No timestamps in source; synthesize a 30-min time series starting
+    2023-01-01. Plot = per crop type. No water-applied data, so
+    irrigated_next_flag is all False.
+    """
+    raw = REAL_ROOT / "kaggle_orig_irrigation" / "raw"
+    out = REAL_ROOT / "kaggle_orig_irrigation" / "converted"
+    out.mkdir(parents=True, exist_ok=True)
+
+    df = pd.read_csv(raw / "irrigation_prediction.csv")
+    df["timestamp"] = pd.date_range("2023-01-01", periods=len(df), freq="30min")
+    df["plot_id"] = "crop_" + df["Crop_Type"].astype(str).str.lower().str.replace(" ", "_")
+    df["soil_moisture_pct"] = pd.to_numeric(df["Soil_Moisture"], errors="coerce")
+    df["soil_temp_c"] = np.nan
+    df["air_temp_c"] = pd.to_numeric(df["Temperature_C"], errors="coerce")
+    df["air_humidity_pct"] = pd.to_numeric(df["Humidity"], errors="coerce")
+    df["rainfall_mm_24h"] = pd.to_numeric(df["Rainfall_mm"], errors="coerce")
+    df["water_applied_l"] = 0.0
+
+    # Map growth stage names to canonical set
+    stage_map = {
+        "Germination": "establishment",
+        "Vegetative": "vegetative",
+        "Flowering": "flowering",
+        "Maturity": "maturity",
+        "Harvesting": "maturity",
+    }
+    df["crop_growth_stage"] = df["Crop_Growth_Stage"].map(stage_map).fillna("maturity")
+
+    df = df.sort_values(["plot_id", "timestamp"])
+    df["days_since_planting"] = (df.groupby("plot_id")["timestamp"]
+                                  .transform(lambda s: (s - s.min()).dt.days))
+    df["irrigated_next_flag"] = False
+
+    df = _ensure_schema(df)
+    df.to_csv(out / "kaggle_orig_irrigation.csv", index=False)
+    print(f"wrote {len(df)} rows -> {out / 'kaggle_orig_irrigation.csv'}")
+    return df
+
+
+def convert_kaggle_pi_iot() -> pd.DataFrame:
+    """Kaggle 'IoT Sensor Data' — 100k sensor readings with ON/OFF status.
+
+    No timestamps in source; synthesize a 30-min time series starting
+    2023-01-01. Single plot. No water-applied data.
+    """
+    raw = REAL_ROOT / "kaggle_pi_iot" / "raw"
+    out = REAL_ROOT / "kaggle_pi_iot" / "converted"
+    out.mkdir(parents=True, exist_ok=True)
+
+    df = pd.read_csv(raw / "iotsensordata.csv")
+    df["timestamp"] = pd.date_range("2023-01-01", periods=len(df), freq="30min")
+    df["plot_id"] = "pi_iot_plot"
+    df["soil_moisture_pct"] = pd.to_numeric(df["Soil Moisture"], errors="coerce")
+    df["soil_temp_c"] = pd.to_numeric(df["Temperature"], errors="coerce")
+    df["air_temp_c"] = pd.to_numeric(df["Air temperature (C)"], errors="coerce")
+    df["air_humidity_pct"] = pd.to_numeric(df["Air humidity (%)"], errors="coerce")
+    df["rainfall_mm_24h"] = pd.to_numeric(df["rainfall"], errors="coerce")
+    df["water_applied_l"] = 0.0
+
+    df = df.sort_values(["plot_id", "timestamp"])
+    df["days_since_planting"] = (df.groupby("plot_id")["timestamp"]
+                                  .transform(lambda s: (s - s.min()).dt.days))
+    df["crop_growth_stage"] = df["days_since_planting"].apply(_growth_stage_from_days)
+    df["irrigated_next_flag"] = False
+
+    df = _ensure_schema(df)
+    df.to_csv(out / "kaggle_pi_iot.csv", index=False)
+    print(f"wrote {len(df)} rows -> {out / 'kaggle_pi_iot.csv'}")
+    return df
+
+
+def convert_kaggle_sa() -> pd.DataFrame:
+    """Kaggle 'Smart Agriculture' — crop moisture/temp/humidity with result.
+
+    No timestamps in source; synthesize a 30-min time series starting
+    2023-01-01. Plot = per crop type. No water-applied data.
+    """
+    raw = REAL_ROOT / "kaggle_sa" / "raw"
+    out = REAL_ROOT / "kaggle_sa" / "converted"
+    out.mkdir(parents=True, exist_ok=True)
+
+    df = pd.read_csv(raw / "cropdata_updated.csv")
+    df["timestamp"] = pd.date_range("2023-01-01", periods=len(df), freq="30min")
+    df["plot_id"] = "crop_" + df["crop ID"].astype(str).str.lower().str.replace(" ", "_")
+    df["soil_moisture_pct"] = pd.to_numeric(df["MOI"], errors="coerce")
+    df["soil_temp_c"] = np.nan
+    df["air_temp_c"] = pd.to_numeric(df["temp"], errors="coerce")
+    df["air_humidity_pct"] = pd.to_numeric(df["humidity"], errors="coerce")
+    df["rainfall_mm_24h"] = 0.0
+    df["water_applied_l"] = 0.0
+
+    # Map seedling stage to canonical growth stage
+    stage_map = {
+        "Germination": "establishment",
+        "Seedling": "establishment",
+        "Vegetative": "vegetative",
+        "Flowering": "flowering",
+        "Maturity": "maturity",
+    }
+    df["crop_growth_stage"] = df["Seedling Stage"].map(stage_map).fillna("maturity")
+
+    df = df.sort_values(["plot_id", "timestamp"])
+    df["days_since_planting"] = (df.groupby("plot_id")["timestamp"]
+                                  .transform(lambda s: (s - s.min()).dt.days))
+    df["irrigated_next_flag"] = False
+
+    df = _ensure_schema(df)
+    df.to_csv(out / "kaggle_sa.csv", index=False)
+    print(f"wrote {len(df)} rows -> {out / 'kaggle_sa.csv'}")
+    return df
+
+
 CONVERTERS = {
     "fbk_soil_moisture": convert_fbk_soil_moisture,
     "zenodo_cotton": convert_zenodo_cotton,
     "unipr_tomato": convert_unipr_tomato,
     "unipr_tomato_evolving": convert_unipr_tomato_evolving,
+    "kaggle_orig_irrigation": convert_kaggle_orig_irrigation,
+    "kaggle_pi_iot": convert_kaggle_pi_iot,
+    "kaggle_sa": convert_kaggle_sa,
 }
 
 

@@ -8,10 +8,55 @@ export const dynamic = "force-dynamic";
 
 const RAW_FILES: Record<string, string> = {
   synthetic: repoPath("data", "raw", "synthetic_sensor_log.csv"),
-  fbk: repoPath("data", "real_datasets", "fbk_soil_moisture", "converted", "fbk_soil_moisture.csv"),
-  zenodo: repoPath("data", "real_datasets", "zenodo_cotton", "converted", "zenodo_cotton.csv"),
-  unipr: repoPath("data", "real_datasets", "unipr_tomato", "converted", "unipr_tomato.csv"),
-  unipr_evolving: repoPath("data", "real_datasets", "unipr_tomato_evolving", "converted", "unipr_tomato_evolving.csv"),
+  fbk: repoPath(
+    "data",
+    "real_datasets",
+    "fbk_soil_moisture",
+    "converted",
+    "fbk_soil_moisture.csv",
+  ),
+  zenodo: repoPath(
+    "data",
+    "real_datasets",
+    "zenodo_cotton",
+    "converted",
+    "zenodo_cotton.csv",
+  ),
+  unipr: repoPath(
+    "data",
+    "real_datasets",
+    "unipr_tomato",
+    "converted",
+    "unipr_tomato.csv",
+  ),
+  unipr_evolving: repoPath(
+    "data",
+    "real_datasets",
+    "unipr_tomato_evolving",
+    "converted",
+    "unipr_tomato_evolving.csv",
+  ),
+  kaggle_orig: repoPath(
+    "data",
+    "real_datasets",
+    "kaggle_orig_irrigation",
+    "converted",
+    "kaggle_orig_irrigation.csv",
+  ),
+  kaggle_pi_iot: repoPath(
+    "data",
+    "real_datasets",
+    "kaggle_pi_iot",
+    "converted",
+    "kaggle_pi_iot.csv",
+  ),
+  kaggle_sa: repoPath(
+    "data",
+    "real_datasets",
+    "kaggle_sa",
+    "converted",
+    "kaggle_sa.csv",
+  ),
 };
 
 const MAX_COMBINED_ROWS = 100_000;
@@ -30,7 +75,14 @@ function sampleRows(rows: Row[], maxRows: number): Row[] {
   return sampled;
 }
 
-function computeDailyAggregates(rows: Row[]): { day: string; avg: number; change: number; direction: "up" | "down" | "flat" }[] {
+function computeDailyAggregates(
+  rows: Row[],
+): {
+  day: string;
+  avg: number;
+  change: number;
+  direction: "up" | "down" | "flat";
+}[] {
   const byDay: Record<string, { sum: number; n: number }> = {};
   for (const row of rows) {
     const ts = String(row.timestamp).slice(0, 10);
@@ -45,7 +97,12 @@ function computeDailyAggregates(rows: Row[]): { day: string; avg: number; change
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([day, { sum, n }]) => ({ day, avg: sum / n }));
 
-  const out: { day: string; avg: number; change: number; direction: "up" | "down" | "flat" }[] = [];
+  const out: {
+    day: string;
+    avg: number;
+    change: number;
+    direction: "up" | "down" | "flat";
+  }[] = [];
   for (let i = 0; i < sorted.length; i++) {
     const change = i > 0 ? sorted[i].avg - sorted[i - 1].avg : 0;
     out.push({
@@ -65,7 +122,16 @@ export async function GET(request: Request) {
   if (dataset === "combined") {
     const allRows: Row[] = [];
     const counts: Record<string, number> = {};
-    for (const id of ["synthetic", "fbk", "zenodo", "unipr", "unipr_evolving"]) {
+    for (const id of [
+      "synthetic",
+      "fbk",
+      "zenodo",
+      "unipr",
+      "unipr_evolving",
+      "kaggle_orig",
+      "kaggle_pi_iot",
+      "kaggle_sa",
+    ]) {
       const file = RAW_FILES[id];
       try {
         const rows = readCsv(file);
