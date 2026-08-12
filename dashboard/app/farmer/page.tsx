@@ -1,12 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  Area,
-  AreaChart,
-  ResponsiveContainer,
-  Tooltip,
-} from "recharts";
+import { Area, AreaChart, ResponsiveContainer, Tooltip } from "recharts";
 
 import Simulator, { DefaultConditions } from "@/components/Simulator";
 import { GlassCard } from "@/components/GlassCard";
@@ -60,7 +55,12 @@ type SimModel = {
 
 function Droplet({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden>
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className={className}
+      aria-hidden
+    >
       <path d="M12 2.5c3.6 4.2 6.5 8 6.5 11.6A6.5 6.5 0 0 1 5.5 14.1C5.5 10.5 8.4 6.7 12 2.5Zm0 3.4C9.8 8.7 7.9 11.7 7.9 14a4.1 4.1 0 1 0 8.2 0c0-2.3-1.9-5.3-4.1-8.1Z" />
     </svg>
   );
@@ -100,7 +100,8 @@ export default function FarmerView() {
       .catch(() => {});
   }, [datasetId, simMode]);
 
-  const activePlot = feed?.plots.find((p) => p.plot_id === simPlot) ?? feed?.plots[0];
+  const activePlot =
+    feed?.plots.find((p) => p.plot_id === simPlot) ?? feed?.plots[0];
 
   const simDefaults: DefaultConditions | null = activePlot
     ? {
@@ -119,7 +120,7 @@ export default function FarmerView() {
 
   if (error) {
     return (
-    <div className="relative z-10 min-h-screen p-6 font-sans">
+      <div className="relative z-10 min-h-screen p-4 font-sans sm:p-6">
         <div className="mx-auto max-w-4xl rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-700">
           {error}
         </div>
@@ -129,7 +130,7 @@ export default function FarmerView() {
 
   if (!feed) {
     return (
-    <div className="relative z-10 min-h-screen p-6 font-sans">
+      <div className="relative z-10 min-h-screen p-4 font-sans sm:p-6">
         <p className="mx-auto max-w-4xl text-sm text-slate-500">
           Loading your daily irrigation guidance…
         </p>
@@ -137,16 +138,17 @@ export default function FarmerView() {
     );
   }
 
-  const needsWater = feed.plots.filter((p) => p.recommendation.action === "irrigate");
+  const needsWater = feed.plots.filter(
+    (p) => p.recommendation.action === "irrigate",
+  );
   const allGood = feed.plots.filter((p) => p.recommendation.action === "wait");
 
   return (
-    <div className="relative z-10 min-h-screen p-6 font-sans">
+    <div className="relative z-10 min-h-screen p-4 font-sans sm:p-6">
       <div className="mx-auto max-w-4xl">
-
         <header className="mb-6 flex flex-wrap items-start justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 sm:text-3xl">
               Good morning, farmer
             </h1>
             <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
@@ -211,22 +213,24 @@ export default function FarmerView() {
           </section>
         ) : (
           <>
-          <section className="mb-8">
-            <GlassCard variant="medium" padding="lg">
-              <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Today&apos;s summary</p>
-              <p className="mt-1 text-2xl font-bold leading-snug text-slate-900 dark:text-slate-100">
-                {needsWater.length === 0
-                  ? "No watering needed today — your soil has enough water."
-                  : `${needsWater.length} of ${feed.plots.length} plots need watering today.`}
-              </p>
-              <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-                {allGood.length > 0 &&
-                  `${allGood.map((p) => p.plot_id).join(" and ")} can wait. `}
-                {needsWater.length > 0 &&
-                  `Start with ${needsWater.map((p) => p.plot_id).join(" and ")}.`}
-                Water in the early morning or evening to save water.
-              </p>
-             </GlassCard>
+            <section className="mb-8">
+              <GlassCard variant="medium" padding="lg">
+                <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
+                  Today&apos;s summary
+                </p>
+                <p className="mt-1 text-2xl font-bold leading-snug text-slate-900 dark:text-slate-100">
+                  {needsWater.length === 0
+                    ? "No watering needed today — your soil has enough water."
+                    : `${needsWater.length} of ${feed.plots.length} plots need watering today.`}
+                </p>
+                <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                  {allGood.length > 0 &&
+                    `${allGood.map((p) => p.plot_id).join(" and ")} can wait. `}
+                  {needsWater.length > 0 &&
+                    `Start with ${needsWater.map((p) => p.plot_id).join(" and ")}.`}
+                  Water in the early morning or evening to save water.
+                </p>
+              </GlassCard>
             </section>
 
             <section className="mb-8 grid grid-cols-1 gap-6">
@@ -237,15 +241,17 @@ export default function FarmerView() {
 
             <section>
               <GlassCard variant="medium" padding="lg">
-                <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Handy watering tips</h2>
-              <ul className="mt-3 space-y-2 text-sm text-slate-700 dark:text-slate-300">
-                {feed.tips.map((tip, i) => (
-                  <li key={i} className="flex gap-2">
-                    <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-green-500" />
-                    {tip}
-                  </li>
-                ))}
-              </ul>
+                <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+                  Handy watering tips
+                </h2>
+                <ul className="mt-3 space-y-2 text-sm text-slate-700 dark:text-slate-300">
+                  {feed.tips.map((tip, i) => (
+                    <li key={i} className="flex gap-2">
+                      <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-green-500" />
+                      {tip}
+                    </li>
+                  ))}
+                </ul>
               </GlassCard>
             </section>
           </>
@@ -262,7 +268,9 @@ function PlotCard({ plot }: { plot: Plot }) {
     <GlassCard variant="medium" padding="none">
       <div
         className={`flex flex-wrap items-center justify-between gap-4 px-6 py-4 ${
-          irrigate ? "bg-amber-50/80 dark:bg-amber-950/40" : "bg-emerald-50/80 dark:bg-emerald-950/40"
+          irrigate
+            ? "bg-amber-50/80 dark:bg-amber-950/40"
+            : "bg-emerald-50/80 dark:bg-emerald-950/40"
         }`}
       >
         <div>
@@ -285,7 +293,9 @@ function PlotCard({ plot }: { plot: Plot }) {
 
       <div className="grid grid-cols-1 gap-6 p-6 md:grid-cols-2">
         <div className="space-y-4">
-          <p className="text-base text-slate-700 dark:text-slate-300">{rec.reason}</p>
+          <p className="text-base text-slate-700 dark:text-slate-300">
+            {rec.reason}
+          </p>
 
           {irrigate ? (
             <div className="rounded-xl border border-amber-200 dark:border-amber-900/50 bg-amber-50 dark:bg-amber-950/30 px-4 py-3">
@@ -306,15 +316,29 @@ function PlotCard({ plot }: { plot: Plot }) {
             </p>
           )}
 
-          <div className="grid grid-cols-2 gap-3">
-            <Reading label="Soil moisture" value={`${current.soil_moisture_pct}%`}
-              tone={irrigate ? "amber" : "green"} />
-            <Reading label="Air temperature" value={`${current.air_temp_c}°C`} />
-            <Reading label="Rain (24h)" value={`${current.rainfall_mm_24h} mm`} />
-            <Reading label="Air humidity" value={`${current.air_humidity_pct}%`} />
+          <div className="grid grid-cols-1 gap-3 min-[420px]:grid-cols-2">
+            <Reading
+              label="Soil moisture"
+              value={`${current.soil_moisture_pct}%`}
+              tone={irrigate ? "amber" : "green"}
+            />
+            <Reading
+              label="Air temperature"
+              value={`${current.air_temp_c}°C`}
+            />
+            <Reading
+              label="Rain (24h)"
+              value={`${current.rainfall_mm_24h} mm`}
+            />
+            <Reading
+              label="Air humidity"
+              value={`${current.air_humidity_pct}%`}
+            />
           </div>
 
-          <p className="text-xs italic text-slate-500 dark:text-slate-400">{plot.stage_tip}</p>
+          <p className="text-xs italic text-slate-500 dark:text-slate-400">
+            {plot.stage_tip}
+          </p>
         </div>
 
         <div className="space-y-4">
@@ -330,9 +354,23 @@ function PlotCard({ plot }: { plot: Plot }) {
                     labelStyle={{ fontSize: 12 }}
                   />
                   <defs>
-                    <linearGradient id={`moist-${plot.plot_id}`} x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#10b981" stopOpacity={0.35} />
-                      <stop offset="100%" stopColor="#10b981" stopOpacity={0.02} />
+                    <linearGradient
+                      id={`moist-${plot.plot_id}`}
+                      x1="0"
+                      y1="0"
+                      x2="0"
+                      y2="1"
+                    >
+                      <stop
+                        offset="0%"
+                        stopColor="#10b981"
+                        stopOpacity={0.35}
+                      />
+                      <stop
+                        offset="100%"
+                        stopColor="#10b981"
+                        stopOpacity={0.02}
+                      />
                     </linearGradient>
                   </defs>
                   <Area
@@ -356,7 +394,10 @@ function PlotCard({ plot }: { plot: Plot }) {
                 .slice(-2)
                 .reverse()
                 .map((ev, i) => (
-                  <p key={i} className="text-sm text-slate-600 dark:text-slate-300">
+                  <p
+                    key={i}
+                    className="text-sm text-slate-600 dark:text-slate-300"
+                  >
                     {ev.timestamp.slice(0, 16).replace("T", " ")} —{" "}
                     {ev.water_applied_l} L
                   </p>
@@ -380,7 +421,9 @@ function Reading({
 }) {
   return (
     <GlassCard variant="thin" padding="sm">
-      <p className="text-[11px] uppercase tracking-wide text-slate-400 dark:text-slate-500">{label}</p>
+      <p className="text-[11px] uppercase tracking-wide text-slate-400 dark:text-slate-500">
+        {label}
+      </p>
       <p
         className={`text-lg font-semibold ${
           tone === "green"

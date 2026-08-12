@@ -16,14 +16,46 @@ export default function ProjectProgressBanner({
   bestModelName = "Logistic Regression",
   bestModelF1 = "0.968",
 }: ProgressBannerProps) {
-  const [activeTab, setActiveTab] = useState<"overview" | "milestones" | "impact">("overview");
+  const [activeTab, setActiveTab] = useState<
+    "overview" | "milestones" | "impact"
+  >("overview");
 
   const milestones = [
-    { id: 1, title: "Sensor Infrastructure", status: "completed", date: "Q1 2026", progress: 100 },
-    { id: 2, title: "Synthetic Baseline ML", status: "completed", date: "Q2 2026", progress: 100 },
-    { id: 3, title: "Real-Time Data Pipeline", status: "completed", date: "Q2 2026", progress: 100 },
-    { id: 4, title: "Edge Model Deployment", status: "active", date: "Q3 2026", progress: 85 },
-    { id: 5, title: "Farmer Usability Study", status: "upcoming", date: "Q4 2026", progress: 20 },
+    {
+      id: 1,
+      title: "Sensor Infrastructure",
+      status: "completed",
+      date: "Q1 2026",
+      progress: 100,
+    },
+    {
+      id: 2,
+      title: "Synthetic Baseline ML",
+      status: "completed",
+      date: "Q2 2026",
+      progress: 100,
+    },
+    {
+      id: 3,
+      title: "Real-Time Data Pipeline",
+      status: "completed",
+      date: "Q2 2026",
+      progress: 100,
+    },
+    {
+      id: 4,
+      title: "Edge Model Deployment",
+      status: "active",
+      date: "Q3 2026",
+      progress: 85,
+    },
+    {
+      id: 5,
+      title: "Farmer Usability Study",
+      status: "upcoming",
+      date: "Q4 2026",
+      progress: 20,
+    },
   ];
 
   return (
@@ -40,7 +72,9 @@ export default function ProjectProgressBanner({
               <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
               100k Enterprise SaaS Engine Active
             </span>
-            <span className="hidden sm:inline-block text-xs text-slate-400 dark:text-slate-500">•</span>
+            <span className="hidden sm:inline-block text-xs text-slate-400 dark:text-slate-500">
+              •
+            </span>
             <span className="hidden sm:inline-block text-xs font-medium text-slate-500 dark:text-slate-400">
               System Health: 99.94% Uptime
             </span>
@@ -50,15 +84,16 @@ export default function ProjectProgressBanner({
             Overall Project Progress & AI Health Matrix
           </h2>
           <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
-            Real-time telemetry, model optimization stage, and environmental impact benchmarks.
+            Real-time telemetry, model optimization stage, and environmental
+            impact benchmarks.
           </p>
         </div>
 
         {/* TAB SWITCHER */}
-        <div className="flex items-center gap-1 rounded-2xl border border-slate-200/80 dark:border-white/10 bg-slate-100/80 dark:bg-slate-800/50 p-1 backdrop-blur-md">
+        <div className="flex w-full flex-wrap items-center gap-1 rounded-2xl border border-slate-200/80 dark:border-white/10 bg-slate-100/80 dark:bg-slate-800/50 p-1 backdrop-blur-md lg:w-auto">
           <button
             onClick={() => setActiveTab("overview")}
-            className={`rounded-xl px-3 py-1.5 text-xs font-medium transition-all ${
+            className={`flex-1 rounded-xl px-3 py-1.5 text-xs font-medium transition-all lg:flex-none ${
               activeTab === "overview"
                 ? "bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm"
                 : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
@@ -68,7 +103,7 @@ export default function ProjectProgressBanner({
           </button>
           <button
             onClick={() => setActiveTab("milestones")}
-            className={`rounded-xl px-3 py-1.5 text-xs font-medium transition-all ${
+            className={`flex-1 rounded-xl px-3 py-1.5 text-xs font-medium transition-all lg:flex-none ${
               activeTab === "milestones"
                 ? "bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm"
                 : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
@@ -78,7 +113,7 @@ export default function ProjectProgressBanner({
           </button>
           <button
             onClick={() => setActiveTab("impact")}
-            className={`rounded-xl px-3 py-1.5 text-xs font-medium transition-all ${
+            className={`flex-1 rounded-xl px-3 py-1.5 text-xs font-medium transition-all lg:flex-none ${
               activeTab === "impact"
                 ? "bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm"
                 : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
@@ -122,7 +157,9 @@ export default function ProjectProgressBanner({
               <div className="mt-2.5 flex justify-between text-[11px] text-slate-500 dark:text-slate-400">
                 <span>Phase 1: Hardware Setup ✓</span>
                 <span>Phase 2: Data Pipeline ✓</span>
-                <span className="font-semibold text-emerald-600 dark:text-emerald-400">Phase 3 & 4: Model Tuning & Edge (In Progress)</span>
+                <span className="font-semibold text-emerald-600 dark:text-emerald-400">
+                  Phase 3 & 4: Model Tuning & Edge (In Progress)
+                </span>
                 <span>Phase 5: Scale</span>
               </div>
             </div>
@@ -233,15 +270,17 @@ export default function ProjectProgressBanner({
                   m.status === "completed"
                     ? "border-emerald-500/30 bg-emerald-500/5 dark:bg-emerald-950/20 text-emerald-900 dark:text-emerald-100"
                     : m.status === "active"
-                    ? "border-blue-500/40 bg-blue-500/10 dark:bg-blue-950/30 text-blue-900 dark:text-blue-100 ring-2 ring-blue-500/20"
-                    : "border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/30 text-slate-500 opacity-70"
+                      ? "border-blue-500/40 bg-blue-500/10 dark:bg-blue-950/30 text-blue-900 dark:text-blue-100 ring-2 ring-blue-500/20"
+                      : "border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/30 text-slate-500 opacity-70"
                 }`}
               >
                 <div className="flex items-center justify-between text-xs font-semibold">
                   <span>Step {m.id}</span>
                   <span>{m.date}</span>
                 </div>
-                <h4 className="mt-2 text-xs font-bold leading-tight">{m.title}</h4>
+                <h4 className="mt-2 text-xs font-bold leading-tight">
+                  {m.title}
+                </h4>
                 <div className="mt-3 flex items-center gap-2">
                   <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800">
                     <div
@@ -249,8 +288,8 @@ export default function ProjectProgressBanner({
                         m.status === "completed"
                           ? "bg-emerald-500"
                           : m.status === "active"
-                          ? "bg-blue-500"
-                          : "bg-slate-400"
+                            ? "bg-blue-500"
+                            : "bg-slate-400"
                       }`}
                       style={{ width: `${m.progress}%` }}
                     />
@@ -266,23 +305,32 @@ export default function ProjectProgressBanner({
           <div className="grid gap-4 sm:grid-cols-3">
             <div className="rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/60 dark:bg-slate-900/40 p-4">
               <span className="text-2xl">🌱</span>
-              <h4 className="mt-2 text-sm font-bold text-slate-900 dark:text-white">Yield Improvement</h4>
+              <h4 className="mt-2 text-sm font-bold text-slate-900 dark:text-white">
+                Yield Improvement
+              </h4>
               <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                +22.4% estimated crop yield improvement due to precision soil-moisture maintenance.
+                +22.4% estimated crop yield improvement due to precision
+                soil-moisture maintenance.
               </p>
             </div>
             <div className="rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/60 dark:bg-slate-900/40 p-4">
               <span className="text-2xl">⚡</span>
-              <h4 className="mt-2 text-sm font-bold text-slate-900 dark:text-white">Energy Consumption</h4>
+              <h4 className="mt-2 text-sm font-bold text-slate-900 dark:text-white">
+                Energy Consumption
+              </h4>
               <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                -28.1% lower pump energy consumption via automated sensor-triggered relay switches.
+                -28.1% lower pump energy consumption via automated
+                sensor-triggered relay switches.
               </p>
             </div>
             <div className="rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/60 dark:bg-slate-900/40 p-4">
               <span className="text-2xl">👨‍🌾</span>
-              <h4 className="mt-2 text-sm font-bold text-slate-900 dark:text-white">Farmer Cost Savings</h4>
+              <h4 className="mt-2 text-sm font-bold text-slate-900 dark:text-white">
+                Farmer Cost Savings
+              </h4>
               <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                Estimated ~$340 saved per hectare/season on water pumping & fuel costs.
+                Estimated ~$340 saved per hectare/season on water pumping & fuel
+                costs.
               </p>
             </div>
           </div>

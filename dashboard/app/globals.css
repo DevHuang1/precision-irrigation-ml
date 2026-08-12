@@ -2,42 +2,79 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* ------------------------------------------------------------------ */
+/*  PDF-EXACT COLOR PALETTE                                            */
+/*  Source: AI_Precision_Irrigation_Proposal_v3.pdf +                 */
+/*          green_beige_modern_agriculture_presentation.pdf            */
+/* ------------------------------------------------------------------ */
+:root {
+  /* Primary palette — extracted directly from V3 Proposal PDF */
+  --pdf-deep-green: #14532d; /* Primary dark — headers, dark slides */
+  --pdf-lime: #86c65a; /* Primary accent — highlights, icons */
+  --pdf-sage: #e4f1d9; /* Light accent — cards, backgrounds */
+  --pdf-cream: #fcfdfb; /* Page background — off-white */
+  --pdf-dark-text: #1f2b22; /* Body text on light backgrounds */
+  --pdf-light-text: #d9ebcb; /* Text on dark backgrounds */
+  --pdf-mid-green: #1f6033; /* Secondary dark green */
+  --pdf-bright-lime: #95d854; /* Brighter accent from green_beige */
+
+  /* Supporting palette */
+  --pdf-muted-green: #5b6b57; /* Secondary text */
+  --pdf-charcoal: #223022; /* Very dark green-black */
+  --pdf-beige: #faf9ed; /* Beige background from green_beige */
+
+  /* Legacy SaaS glass tokens (preserved) */
+  --background: var(--pdf-cream);
+  --foreground: var(--pdf-dark-text);
+}
+
+.dark {
+  --background: #090d16;
+  --foreground: #f8fafc;
+}
+
 @layer base {
-  @font-face {
-    font-family: "SF Pro";
-    src: url("https://fonts.gstatic.com/s/sfprodisplay/variable/sf-pro-display-variable.woff2") format("woff2-variations");
-    font-weight: 100 900;
-    font-style: normal;
-  }
-
-  :root {
-    --background: #f8fafc;
-    --foreground: #0f172a;
-  }
-
-  .dark {
-    --background: #090d16;
-    --foreground: #f8fafc;
-  }
-
   html {
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   body {
     background-color: var(--background);
     color: var(--foreground);
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", "Inter", system-ui, sans-serif;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-family:
+      -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+      "Segoe UI", "Inter", system-ui, sans-serif;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
     font-variant-numeric: tabular-nums;
     font-size: 0.9375rem;
     -webkit-tap-highlight-color: transparent;
   }
 
   html {
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", "Inter", system-ui, sans-serif;
+    font-family:
+      -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+      "Segoe UI", "Inter", system-ui, sans-serif;
+  }
+
+  /* Prevent horizontal scroll from any stray overflowing element */
+  body,
+  #__next {
+    overflow-x: hidden;
+  }
+
+  /* Minimum readable tap-target sizes on touch devices */
+  @media (pointer: coarse) {
+    button,
+    [role="button"],
+    a {
+      min-height: 2.25rem;
+    }
   }
 
   @media (prefers-reduced-transparency: reduce) {
@@ -55,34 +92,52 @@
 }
 
 @layer utilities {
-  /* Liquid Glass Material Variables — matched to the Apple Liquid Glass skill */
+  /* ------------------------------------------------------------------ */
+  /*  Safe-area insets for mobile notch / home-indicator devices        */
+  /* ------------------------------------------------------------------ */
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .pt-safe {
+    padding-top: env(safe-area-inset-top);
+  }
+  .pl-safe {
+    padding-left: env(safe-area-inset-left);
+  }
+  .pr-safe {
+    padding-right: env(safe-area-inset-right);
+  }
+
+  .min-h-safe {
+    min-height: calc(
+      100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom)
+    );
+  }
+
+  /* ------------------------------------------------------------------ */
+  /*  Liquid Glass — PDF-matched color tokens                           */
+  /* ------------------------------------------------------------------ */
   :root {
-    /* Thin Glass: floating toolbar, context menus */
+    /* Thin Glass */
     --glass-thin-light: rgba(255, 255, 255, 0.45);
     --glass-thin-dark: rgba(15, 17, 23, 0.55);
-    --glass-thin-blur: blur(20px);
-    --glass-thin-saturate: saturate(180%);
-    --glass-thin-border: rgba(255, 255, 255, 0.30);
-    --glass-thin-rim: rgba(255, 255, 255, 0.60);
+    --glass-thin-border: rgba(255, 255, 255, 0.3);
+    --glass-thin-rim: rgba(255, 255, 255, 0.6);
 
-    /* Medium Glass: modal sheets, cards */
-    --glass-medium-light: rgba(255, 255, 255, 0.70);
-    --glass-medium-dark: rgba(22, 25, 35, 0.75);
-    --glass-medium-blur: blur(32px);
-    --glass-medium-saturate: saturate(160%);
-    --glass-medium-border: rgba(255, 255, 255, 0.15);
-    --glass-medium-rim: rgba(255, 255, 255, 0.50);
-    --glass-medium-shadow: rgba(0, 0, 0, 0.30);
+    /* Medium Glass — green-tinted for slide cards */
+    --glass-medium-light: rgba(228, 241, 217, 0.65);
+    --glass-medium-dark: rgba(20, 83, 45, 0.75);
+    --glass-medium-border: rgba(134, 198, 90, 0.25);
+    --glass-medium-rim: rgba(134, 198, 90, 0.45);
+    --glass-medium-shadow: rgba(20, 83, 45, 0.2);
 
-    /* Thick Glass: sidebar, nav panels */
+    /* Thick Glass */
     --glass-thick-light: rgba(248, 249, 252, 0.88);
     --glass-thick-dark: rgba(10, 12, 16, 0.92);
-    --glass-thick-blur: blur(48px);
-    --glass-thick-saturate: saturate(140%);
     --glass-thick-border: rgba(255, 255, 255, 0.08);
   }
 
-  /* Squircle corners — supported natively on WebKit, polyfilled via clip-path */
+  /* Squircle corners */
   .squircle {
     corner-shape: squircle;
     border-start-start-radius: 18px;
@@ -107,40 +162,166 @@
     border-end-end-radius: 24px;
   }
 
-  /* Specular highlight utilities — top rim key light */
+  /* ------------------------------------------------------------------ */
+  /*  Glass Card — PDF-matched green tint                                */
+  /* ------------------------------------------------------------------ */
+  .glass-card {
+    position: relative;
+    background: color-mix(
+      in srgb,
+      var(--glass-medium-light, rgba(228, 241, 217, 0.65)) 85%,
+      transparent
+    );
+    backdrop-filter: blur(32px) saturate(160%);
+    -webkit-backdrop-filter: blur(32px) saturate(160%);
+    border-radius: 20px;
+    border: 1px solid var(--glass-medium-border, rgba(134, 198, 90, 0.25));
+    box-shadow:
+      inset 0 1px 0 0 var(--glass-medium-rim, rgba(134, 198, 90, 0.45)),
+      inset 0 -1px 0 0 var(--glass-medium-shadow, rgba(20, 83, 45, 0.2)),
+      0 4px 6px -1px rgba(0, 0, 0, 0.1),
+      0 12px 24px -4px rgba(20, 83, 45, 0.12);
+    transition:
+      transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 0.25s ease;
+  }
+
+  .dark .glass-card {
+    background: color-mix(
+      in srgb,
+      var(--glass-medium-dark, rgba(20, 83, 45, 0.75)) 85%,
+      transparent
+    );
+    border: 1px solid rgba(134, 198, 90, 0.12);
+    box-shadow:
+      inset 0 1px 0 0 rgba(134, 198, 90, 0.18),
+      inset 0 -1px 0 0 rgba(0, 0, 0, 0.35),
+      0 4px 6px -1px rgba(0, 0, 0, 0.25),
+      0 12px 24px -4px rgba(0, 0, 0, 0.35);
+  }
+
+  .glass-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(134, 198, 90, 0.45);
+    box-shadow:
+      inset 0 1px 0 0 rgba(134, 198, 90, 0.55),
+      inset 0 -1px 0 0 rgba(20, 83, 45, 0.2),
+      0 8px 16px -2px rgba(0, 0, 0, 0.12),
+      0 20px 32px -4px rgba(20, 83, 45, 0.18);
+  }
+
+  .dark .glass-card:hover {
+    border-color: rgba(134, 198, 90, 0.22);
+    box-shadow:
+      inset 0 1px 0 0 rgba(134, 198, 90, 0.25),
+      inset 0 -1px 0 0 rgba(0, 0, 0, 0.35),
+      0 8px 16px -2px rgba(0, 0, 0, 0.3),
+      0 20px 32px -4px rgba(0, 0, 0, 0.4);
+  }
+
+  .glass-card:active {
+    transform: translateY(0px) scale(0.992);
+  }
+
+  /* ------------------------------------------------------------------ */
+  /*  Thin Glass — PDF-matched                                          */
+  /* ------------------------------------------------------------------ */
+  .glass-thin {
+    background: rgba(228, 241, 217, 0.55);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(134, 198, 90, 0.35);
+    box-shadow: inset 0 1px 0 0 rgba(134, 198, 90, 0.55);
+  }
+
+  .dark .glass-thin {
+    background: rgba(20, 83, 45, 0.55);
+    border: 1px solid rgba(134, 198, 90, 0.12);
+    box-shadow: inset 0 1px 0 0 rgba(134, 198, 90, 0.18);
+  }
+
+  /* ------------------------------------------------------------------ */
+  /*  Dark Hero Card — matches V3 dark slides                           */
+  /* ------------------------------------------------------------------ */
+  .glass-hero {
+    background: linear-gradient(
+      135deg,
+      var(--pdf-deep-green, #14532d) 0%,
+      var(--pdf-mid-green, #1f6033) 100%
+    );
+    border: 1px solid rgba(134, 198, 90, 0.2);
+    box-shadow:
+      inset 0 1px 0 0 rgba(134, 198, 90, 0.25),
+      inset 0 -1px 0 0 rgba(0, 0, 0, 0.3),
+      0 4px 6px -1px rgba(20, 83, 45, 0.2),
+      0 12px 24px -4px rgba(20, 83, 45, 0.25);
+  }
+
+  /* ------------------------------------------------------------------ */
+  /*  Status Pill — PDF-matched                                         */
+  /* ------------------------------------------------------------------ */
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 9999px;
+    border: 1px solid rgba(134, 198, 90, 0.35);
+    padding: 4px 14px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    background: rgba(134, 198, 90, 0.15);
+    color: var(--pdf-light-text, #d9ebcb);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .dark .status-pill {
+    background: rgba(134, 198, 90, 0.1);
+    border-color: rgba(134, 198, 90, 0.2);
+  }
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 9999px;
+    background: var(--pdf-lime, #86c65a);
+    box-shadow: 0 0 8px rgba(134, 198, 90, 0.6);
+  }
+
+  /* ------------------------------------------------------------------ */
+  /*  Specular Highlight                                                */
+  /* ------------------------------------------------------------------ */
   .glass-specular {
-    box-shadow: inset 0 1px 0 0 var(--glass-medium-rim);
+    box-shadow: inset 0 1px 0 0
+      var(--glass-medium-rim, rgba(134, 198, 90, 0.45));
   }
 
   .glass-rim-ambient {
-    box-shadow: inset 0 -1px 0 0 var(--glass-medium-shadow);
+    box-shadow: inset 0 -1px 0 0
+      var(--glass-medium-shadow, rgba(20, 83, 45, 0.2));
   }
 
-  /* Tabular numerics for data display */
+  /* ------------------------------------------------------------------ */
+  /*  Tabular Numerics                                                  */
+  /* ------------------------------------------------------------------ */
   .tabular {
     font-variant-numeric: tabular-nums;
   }
 
-  /* Subtle noise texture for depth — applied via pseudo-element */
-  .noise {
-    mask-image: url("/noise.svg");
-    mask-repeat: repeat;
-    mask-size: 200px;
-    opacity: 0.015;
-    pointer-events: none;
-  }
-
-  .dark .noise {
-    opacity: 0.025;
-  }
-
-  /* Focus rings — crisp, high-contrast, keyboard-first */
+  /* ------------------------------------------------------------------ */
+  /*  Focus Rings — PDF accent color                                    */
+  /* ------------------------------------------------------------------ */
   :focus-visible {
-    outline: 2px solid color-mix(in srgb, var(--ring, #10b981), transparent 20%);
+    outline: 2px solid
+      color-mix(in srgb, var(--pdf-lime, #86c65a), transparent 20%);
     outline-offset: 2px;
   }
 
-  /* Scrollbar — subtle, glass-aware */
+  /* ------------------------------------------------------------------ */
+  /*  Scrollbar — green-tinted                                          */
+  /* ------------------------------------------------------------------ */
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -151,17 +332,26 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: rgba(148, 163, 184, 0.25);
+    background: rgba(134, 198, 90, 0.25);
     border-radius: 9999px;
-    border: 0.5px solid rgba(255, 255, 255, 0.1);
+    border: 0.5px solid rgba(134, 198, 90, 0.15);
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(148, 163, 184, 0.45);
+    background: rgba(134, 198, 90, 0.45);
   }
 
   * {
     scrollbar-width: thin;
-    scrollbar-color: rgba(148, 163, 184, 0.25) transparent;
+    scrollbar-color: rgba(134, 198, 90, 0.25) transparent;
+  }
+
+  /* ------------------------------------------------------------------ */
+  /*  Pipeline visualization — animated connection dashes               */
+  /* ------------------------------------------------------------------ */
+  @keyframes dash {
+    to {
+      stroke-dashoffset: -24;
+    }
   }
 }

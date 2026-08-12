@@ -225,11 +225,11 @@ export default function Home() {
   const bestModel = comparison[0];
 
   return (
-    <div className="relative z-10 min-h-screen p-6 font-sans">
+    <div className="relative z-10 min-h-screen p-4 font-sans sm:p-6">
       <div className="mx-auto max-w-6xl">
         <header className="mb-6 flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">
+            <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-100 sm:text-2xl">
               Precision Irrigation — Monitoring Dashboard
             </h1>
             <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
@@ -319,15 +319,25 @@ export default function Home() {
                 : `Dataset: ${DATASETS.find((d) => d.id === datasetId)?.label}`}
               .
             </p>
-            <div className="h-80">
+            <div className="h-64 sm:h-80">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={moistureSeries}>
+                <LineChart
+                  data={moistureSeries}
+                  margin={{ left: 0, right: 8, top: 8, bottom: 0 }}
+                >
                   <CartesianGrid
                     strokeDasharray="3 3"
                     stroke="#cbd5e1"
                     className="dark:stroke-slate-800"
                   />
-                  <XAxis dataKey="day" tick={{ fontSize: 11 }} />
+                  <XAxis
+                    dataKey="day"
+                    tick={{ fontSize: 10 }}
+                    interval="preserveStartEnd"
+                    angle={-20}
+                    textAnchor="end"
+                    height={50}
+                  />
                   <YAxis
                     domain={[0, 100]}
                     tick={{ fontSize: 11 }}
@@ -381,9 +391,13 @@ export default function Home() {
               Day-over-day change in average soil moisture. Green = increase,
               red = decrease.
             </p>
-            <div className="h-72">
+            <div className="h-64 sm:h-72">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={changeSeries} barSize={24}>
+                <BarChart
+                  data={changeSeries}
+                  barSize={24}
+                  margin={{ left: 0, right: 8, top: 8, bottom: 0 }}
+                >
                   <CartesianGrid
                     strokeDasharray="3 3"
                     stroke="#cbd5e1"
@@ -501,7 +515,7 @@ export default function Home() {
                     model: String(r.model),
                     macro_f1: Number(r.macro_f1),
                   }))}
-                  margin={{ left: 20 }}
+                  margin={{ left: 0, right: 8 }}
                 >
                   <CartesianGrid
                     strokeDasharray="3 3"
@@ -516,8 +530,8 @@ export default function Home() {
                   <YAxis
                     type="category"
                     dataKey="model"
-                    width={150}
-                    tick={{ fontSize: 11 }}
+                    width={110}
+                    tick={{ fontSize: 10 }}
                   />
                   <Tooltip />
                   <Bar dataKey="macro_f1" radius={[0, 4, 4, 0]}>

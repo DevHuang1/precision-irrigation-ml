@@ -216,48 +216,49 @@ function computeSuggestedWater(
   return Math.round(base * 10) / 10;
 }
 
-const SCENARIOS: { label: string; icon: string; apply: (i: Input) => Input }[] = [
-  {
-    label: "Dry spell",
-    icon: "☀️",
-    apply: (i) => ({
-      ...i,
-      rainfall_mm_24h: 0,
-      air_temp_c: Math.max(i.air_temp_c, 32),
-      air_humidity_pct: Math.min(i.air_humidity_pct, 30),
-    }),
-  },
-  {
-    label: "Heavy rain",
-    icon: "🌧️",
-    apply: (i) => ({
-      ...i,
-      rainfall_mm_24h: 25,
-      air_temp_c: Math.min(i.air_temp_c, 28),
-      air_humidity_pct: Math.max(i.air_humidity_pct, 80),
-    }),
-  },
-  {
-    label: "Heatwave",
-    icon: "🔥",
-    apply: (i) => ({
-      ...i,
-      air_temp_c: 40,
-      air_humidity_pct: 20,
-      rainfall_mm_24h: 0,
-    }),
-  },
-  {
-    label: "Cool day",
-    icon: "❄️",
-    apply: (i) => ({
-      ...i,
-      air_temp_c: 18,
-      air_humidity_pct: 70,
-      soil_temp_c: Math.min(i.soil_temp_c, 22),
-    }),
-  },
-];
+const SCENARIOS: { label: string; icon: string; apply: (i: Input) => Input }[] =
+  [
+    {
+      label: "Dry spell",
+      icon: "☀️",
+      apply: (i) => ({
+        ...i,
+        rainfall_mm_24h: 0,
+        air_temp_c: Math.max(i.air_temp_c, 32),
+        air_humidity_pct: Math.min(i.air_humidity_pct, 30),
+      }),
+    },
+    {
+      label: "Heavy rain",
+      icon: "🌧️",
+      apply: (i) => ({
+        ...i,
+        rainfall_mm_24h: 25,
+        air_temp_c: Math.min(i.air_temp_c, 28),
+        air_humidity_pct: Math.max(i.air_humidity_pct, 80),
+      }),
+    },
+    {
+      label: "Heatwave",
+      icon: "🔥",
+      apply: (i) => ({
+        ...i,
+        air_temp_c: 40,
+        air_humidity_pct: 20,
+        rainfall_mm_24h: 0,
+      }),
+    },
+    {
+      label: "Cool day",
+      icon: "❄️",
+      apply: (i) => ({
+        ...i,
+        air_temp_c: 18,
+        air_humidity_pct: 70,
+        soil_temp_c: Math.min(i.soil_temp_c, 22),
+      }),
+    },
+  ];
 
 export default function Simulator({
   sim,
@@ -315,7 +316,8 @@ export default function Simulator({
       );
       if (rain < 1) parts.push("No meaningful rain in the last 24h.");
       else parts.push("Recent rain has refreshed the soil.");
-      if (airTemp >= 25) parts.push("High temperatures are increasing evaporation.");
+      if (airTemp >= 25)
+        parts.push("High temperatures are increasing evaporation.");
       if (soilType === "sandy")
         parts.push("Sandy soil drains quickly, so watch moisture closely.");
       if (soilType === "clay")
@@ -333,7 +335,10 @@ export default function Simulator({
     const out: { soil_moisture_pct: number; probability: number }[] = [];
     for (let m = 0; m <= 100; m += 2) {
       const f = buildFeatures({ ...baseInput, soil_moisture_pct: m });
-      out.push({ soil_moisture_pct: m, probability: +(scoreProbability(sim, f) * 100).toFixed(1) });
+      out.push({
+        soil_moisture_pct: m,
+        probability: +(scoreProbability(sim, f) * 100).toFixed(1),
+      });
     }
     return out;
   }, [sim, baseInput]);
@@ -352,10 +357,12 @@ export default function Simulator({
 
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
-      <div className="space-y-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/75 p-6 shadow-[0_1px_2px_-1px_rgba(0,0,0,0.06),_0_4px_12px_-4px_rgba(0,0,0,0.08),_inset_0_1px_0_0_rgba(255,255,255,0.5),_inset_0_-1px_0_0_rgba(0,0,0,0.3)] backdrop-blur-[20px] saturate-170 lg:col-span-2">
-        <div className="flex items-center justify-between">
+      <div className="space-y-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/75 p-4 sm:p-6 shadow-[0_1px_2px_-1px_rgba(0,0,0,0.06),_0_4px_12px_-4px_rgba(0,0,0,0.08),_inset_0_1px_0_0_rgba(255,255,255,0.5),_inset_0_-1px_0_0_rgba(0,0,0,0.3)] backdrop-blur-[20px] saturate-170 lg:col-span-2">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h2 className="text-lg font-semibold text-slate-900">Simulate conditions</h2>
+            <h2 className="text-lg font-semibold text-slate-900">
+              Simulate conditions
+            </h2>
             <p className="text-xs text-slate-500">
               Pick a dataset context, then drag sliders or apply a scenario.
             </p>
@@ -377,9 +384,9 @@ export default function Simulator({
                   setSoilType(ds.defaults.soil_type);
                 }
               }}
-               className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs text-slate-800 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100"
-             >
-               {DATASETS.map((d) => (
+              className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs text-slate-800 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100"
+            >
+              {DATASETS.map((d) => (
                 <option key={d.id} value={d.id}>
                   {d.label}
                 </option>
@@ -408,7 +415,7 @@ export default function Simulator({
                 setHumidity(next.air_humidity_pct);
                 setRain(next.rainfall_mm_24h);
               }}
-               className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:border-emerald-300 hover:bg-emerald-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200"
+              className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:border-emerald-300 hover:bg-emerald-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200"
             >
               {s.icon} {s.label}
             </button>
@@ -426,27 +433,43 @@ export default function Simulator({
                 {soil.toFixed(0)}%
               </span>
               <input
-                type="range" min={0} max={100} value={soil} className={slider}
+                type="range"
+                min={0}
+                max={100}
+                value={soil}
+                className={slider}
                 onChange={(e) => setSoil(Number(e.target.value))}
               />
             </label>
             <label className="block text-sm">
-              <span className="font-medium text-slate-700">Air temperature</span>
+              <span className="font-medium text-slate-700">
+                Air temperature
+              </span>
               <span className="float-right font-semibold text-emerald-600">
                 {airTemp.toFixed(0)}°C
               </span>
               <input
-                type="range" min={-5} max={45} value={airTemp} className={slider}
+                type="range"
+                min={-5}
+                max={45}
+                value={airTemp}
+                className={slider}
                 onChange={(e) => setAirTemp(Number(e.target.value))}
               />
             </label>
             <label className="block text-sm">
-              <span className="font-medium text-slate-700">Soil temperature</span>
+              <span className="font-medium text-slate-700">
+                Soil temperature
+              </span>
               <span className="float-right font-semibold text-emerald-600">
                 {soilTemp.toFixed(0)}°C
               </span>
               <input
-                type="range" min={0} max={45} value={soilTemp} className={slider}
+                type="range"
+                min={0}
+                max={45}
+                value={soilTemp}
+                className={slider}
                 onChange={(e) => setSoilTemp(Number(e.target.value))}
               />
             </label>
@@ -456,27 +479,43 @@ export default function Simulator({
                 {humidity.toFixed(0)}%
               </span>
               <input
-                type="range" min={0} max={100} value={humidity} className={slider}
+                type="range"
+                min={0}
+                max={100}
+                value={humidity}
+                className={slider}
                 onChange={(e) => setHumidity(Number(e.target.value))}
               />
             </label>
             <label className="block text-sm">
-              <span className="font-medium text-slate-700">Rain — last 24h</span>
+              <span className="font-medium text-slate-700">
+                Rain — last 24h
+              </span>
               <span className="float-right font-semibold text-emerald-600">
                 {rain.toFixed(0)} mm
               </span>
               <input
-                type="range" min={0} max={60} value={rain} className={slider}
+                type="range"
+                min={0}
+                max={60}
+                value={rain}
+                className={slider}
                 onChange={(e) => setRain(Number(e.target.value))}
               />
             </label>
             <label className="block text-sm">
-              <span className="font-medium text-slate-700">Days since planting</span>
+              <span className="font-medium text-slate-700">
+                Days since planting
+              </span>
               <span className="float-right font-semibold text-emerald-600">
                 {days} days
               </span>
               <input
-                type="range" min={0} max={120} value={days} className={slider}
+                type="range"
+                min={0}
+                max={120}
+                value={days}
+                className={slider}
                 onChange={(e) => setDays(Number(e.target.value))}
               />
             </label>
@@ -522,7 +561,11 @@ export default function Simulator({
                 {hour.toString().padStart(2, "0")}:00
               </span>
               <input
-                type="range" min={0} max={23} value={hour} className={slider}
+                type="range"
+                min={0}
+                max={23}
+                value={hour}
+                className={slider}
                 onChange={(e) => setHour(Number(e.target.value))}
               />
             </label>
@@ -540,7 +583,9 @@ export default function Simulator({
         >
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
-              <p className="text-sm font-medium text-white/80">Model recommendation</p>
+              <p className="text-sm font-medium text-white/80">
+                Model recommendation
+              </p>
               <p className="mt-1 text-3xl font-bold">
                 {action === "irrigate" ? "Water now" : "No watering needed"}
               </p>
@@ -552,7 +597,9 @@ export default function Simulator({
             </div>
             <div className="text-right">
               <p className="text-xs text-white/70">Confidence</p>
-              <p className="text-2xl font-bold">{(confidence * 100).toFixed(0)}%</p>
+              <p className="text-2xl font-bold">
+                {(confidence * 100).toFixed(0)}%
+              </p>
               <div className="mt-1 h-2 w-24 rounded-full bg-white/30">
                 <div
                   className="h-2 rounded-full bg-white"
@@ -597,7 +644,11 @@ export default function Simulator({
                     value: "irrigation probability (%)",
                     angle: -90,
                     position: "insideLeft",
-                    style: { textAnchor: "middle", fontSize: 11, fill: "#64748b" },
+                    style: {
+                      textAnchor: "middle",
+                      fontSize: 11,
+                      fill: "#64748b",
+                    },
                   }}
                 />
                 <Tooltip
@@ -619,9 +670,7 @@ export default function Simulator({
             <span className="flex items-center gap-1">
               <span className="h-2 w-4 rounded bg-red-500" /> 50% threshold
             </span>
-            <span>
-              Stage tip: {STAGE_TIPS[stage]}
-            </span>
+            <span>Stage tip: {STAGE_TIPS[stage]}</span>
           </div>
         </div>
       </div>

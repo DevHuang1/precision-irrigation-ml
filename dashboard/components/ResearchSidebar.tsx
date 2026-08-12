@@ -8,8 +8,21 @@ import { usePathname } from "next/navigation";
 // NAV ITEMS (Preserved exact data binding & routes)
 export const NAV_ITEMS = [
   { id: "home", label: "Home", href: "/", icon: HomeIcon },
-  { id: "engineer", label: "Engineer View", href: "/engineer", icon: ChartIcon },
+  {
+    id: "engineer",
+    label: "Engineer View",
+    href: "/engineer",
+    icon: ChartIcon,
+  },
   { id: "farmer", label: "Farmer View", href: "/farmer", icon: SproutIcon },
+  {
+    id: "visualization",
+    label: "Visualization",
+    href: "/visualization",
+    icon: PulseIcon,
+  },
+  { id: "progress", label: "Progress", href: "/progress", icon: ProgressIcon },
+  { id: "docs", label: "Documentation", href: "/docs", icon: BookIcon },
   { id: "research", label: "Research", href: "/research", icon: FlaskIcon },
 ] as const;
 
@@ -33,7 +46,10 @@ export default function ResearchSidebar({
 
   // Sync theme with localStorage and documentElement (Default: LIGHT)
   useEffect(() => {
-    const storedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
+    const storedTheme = localStorage.getItem("theme") as
+      | "light"
+      | "dark"
+      | null;
     const activeTheme = storedTheme || "light";
     setTheme(activeTheme);
     if (activeTheme === "dark") {
@@ -205,7 +221,7 @@ function SidebarContent({
       {/* FOOTER ACTIONS */}
       <div className="pt-3 space-y-2">
         <div className="mb-2 h-[1px] w-full bg-gradient-to-r from-transparent via-slate-200 dark:via-white/10 to-transparent" />
-        
+
         {/* LIGHT / DARK MODE TOGGLE BUTTON */}
         <motion.button
           whileHover={{ scale: 1.02 }}
@@ -214,7 +230,9 @@ function SidebarContent({
           className={`flex w-full items-center justify-between rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-white/5 px-3 py-2 text-xs font-medium text-slate-700 dark:text-slate-300 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] transition-all duration-200 hover:bg-slate-100 dark:hover:bg-white/10 ${
             isCollapsed ? "justify-center px-0" : ""
           }`}
-          title={theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
+          title={
+            theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"
+          }
         >
           <div className="flex items-center gap-2">
             {theme === "dark" ? <MoonIcon /> : <SunIcon />}
@@ -304,7 +322,9 @@ function SidebarLink({
 
       {/* Label */}
       {!isCollapsed && (
-        <span className="relative z-10 truncate tracking-tight">{item.label}</span>
+        <span className="relative z-10 truncate tracking-tight">
+          {item.label}
+        </span>
       )}
 
       {/* Active Neon Accent Dot */}
@@ -326,16 +346,36 @@ function SidebarLink({
 /* --- ICONS --- */
 function SunIcon() {
   return (
-    <svg className="h-4 w-4 text-amber-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+    <svg
+      className="h-4 w-4 text-amber-500 shrink-0"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+      />
     </svg>
   );
 }
 
 function MoonIcon() {
   return (
-    <svg className="h-4 w-4 text-indigo-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+    <svg
+      className="h-4 w-4 text-indigo-400 shrink-0"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+      />
     </svg>
   );
 }
@@ -397,6 +437,25 @@ function SproutIcon({ active }: { active: boolean }) {
   );
 }
 
+function BookIcon({ active }: { active: boolean }) {
+  return (
+    <svg
+      className={`h-4.5 w-4.5 transition-colors ${
+        active ? "stroke-emerald-600 dark:stroke-emerald-400" : "stroke-current"
+      }`}
+      fill="none"
+      strokeWidth={2}
+      viewBox="0 0 24 24"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+      />
+    </svg>
+  );
+}
+
 function FlaskIcon({ active }: { active: boolean }) {
   return (
     <svg
@@ -432,10 +491,58 @@ function ChevronIcon({ isCollapsed }: { isCollapsed: boolean }) {
   );
 }
 
+function ProgressIcon({ active }: { active: boolean }) {
+  return (
+    <svg
+      className={`h-4.5 w-4.5 transition-colors ${
+        active ? "stroke-emerald-600 dark:stroke-emerald-400" : "stroke-current"
+      }`}
+      fill="none"
+      strokeWidth={2}
+      viewBox="0 0 24 24"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+      />
+    </svg>
+  );
+}
+
+function PulseIcon({ active }: { active: boolean }) {
+  return (
+    <svg
+      className={`h-4.5 w-4.5 transition-colors ${
+        active ? "stroke-emerald-600 dark:stroke-emerald-400" : "stroke-current"
+      }`}
+      fill="none"
+      strokeWidth={2}
+      viewBox="0 0 24 24"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M13 10V3L4 14h7v7l9-11h-7z"
+      />
+    </svg>
+  );
+}
+
 function MenuIcon() {
   return (
-    <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+    <svg
+      className="h-5 w-5"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M4 6h16M4 12h16M4 18h16"
+      />
     </svg>
   );
 }
