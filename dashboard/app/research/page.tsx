@@ -647,21 +647,36 @@ const PDF_COLORS = {
   beige: "#faf9ed",
 } as const;
 
+const DARK_COLORS = {
+  deepGreen: "#14532d",
+  midGreen: "#1f6033",
+  lime: "#86c65a",
+  brightLime: "#95d854",
+  sage: "#1e293b",
+  cream: "#0f172a",
+  darkText: "#f1f5f9",
+  lightText: "#f1f5f9",
+  mutedGreen: "#94a3b8",
+  charcoal: "#f1f5f9",
+  beige: "#0f172a",
+} as const;
+
 /* ------------------------------------------------------------------ */
 /*  Progress Bar                                                       */
 /* ------------------------------------------------------------------ */
-function ProgressBar({ current, total }: { current: number; total: number }) {
+function ProgressBar({ current, total, isDark }: { current: number; total: number; isDark: boolean }) {
   const pct = total === 0 ? 0 : ((current + 1) / total) * 100;
+  const c = isDark ? DARK_COLORS : PDF_COLORS;
   return (
     <div
       className="fixed top-0 left-0 right-0 z-50 h-1"
-      style={{ backgroundColor: `${PDF_COLORS.sage}66` }}
+      style={{ backgroundColor: `${c.sage}66` }}
     >
       <div
         className="h-full transition-all duration-500 ease-out"
         style={{
           width: `${pct}%`,
-          background: `linear-gradient(to right, ${PDF_COLORS.lime}, ${PDF_COLORS.brightLime})`,
+          background: `linear-gradient(to right, ${c.lime}, ${c.brightLime})`,
         }}
       />
     </div>
@@ -671,14 +686,15 @@ function ProgressBar({ current, total }: { current: number; total: number }) {
 /* ------------------------------------------------------------------ */
 /*  Slide Counter                                                      */
 /* ------------------------------------------------------------------ */
-function SlideCounter({ current, total }: { current: number; total: number }) {
+function SlideCounter({ current, total, isDark }: { current: number; total: number; isDark: boolean }) {
+  const c = isDark ? DARK_COLORS : PDF_COLORS;
   return (
     <div
       className="fixed top-3 right-4 z-40 hidden rounded-full px-3 py-1 text-xs font-medium shadow-sm backdrop-blur-md sm:block"
       style={{
-        backgroundColor: `${PDF_COLORS.sage}cc`,
-        color: PDF_COLORS.deepGreen,
-        border: `1px solid ${PDF_COLORS.lime}55`,
+        backgroundColor: `${c.sage}cc`,
+        color: c.deepGreen,
+        border: `1px solid ${c.lime}55`,
       }}
     >
       Slide {current + 1} / {total}
@@ -689,8 +705,9 @@ function SlideCounter({ current, total }: { current: number; total: number }) {
 /* ------------------------------------------------------------------ */
 /*  Slide Renderer                                                     */
 /* ------------------------------------------------------------------ */
-function Slide({ data, index }: { data: SlideData; index: number }) {
+function Slide({ data, index, isDark }: { data: SlideData; index: number; isDark: boolean }) {
   const variant = (data as { variant?: string }).variant || "light";
+  const c = isDark ? DARK_COLORS : PDF_COLORS;
 
   /* ---------- HERO / TITLE SLIDES (dark green bg) ---------- */
   if (data.type === "title") {
@@ -699,8 +716,8 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
       <div
         className="flex h-full flex-col items-center justify-center text-center px-6 rounded-3xl"
         style={{
-          background: `linear-gradient(135deg, ${PDF_COLORS.deepGreen} 0%, ${PDF_COLORS.midGreen} 100%)`,
-          border: `1px solid ${PDF_COLORS.lime}33`,
+          background: `linear-gradient(135deg, ${c.deepGreen} 0%, ${c.midGreen} 100%)`,
+          border: `1px solid ${c.lime}33`,
           boxShadow:
             "inset 0 1px 0 0 rgba(134,198,90,0.30), inset 0 -1px 0 0 rgba(0,0,0,0.30), 0 4px 6px -1px rgba(20,83,45,0.20), 0 12px 24px -4px rgba(20,83,45,0.25)",
         }}
@@ -708,16 +725,16 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
         <div
           className="mb-6 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold backdrop-blur-md"
           style={{
-            backgroundColor: `${PDF_COLORS.lime}1f`,
-            color: PDF_COLORS.lightText,
-            border: `1px solid ${PDF_COLORS.lime}55`,
+            backgroundColor: `${c.lime}1f`,
+            color: c.lightText,
+            border: `1px solid ${c.lime}55`,
           }}
         >
           <span
             className="h-1.5 w-1.5 rounded-full"
             style={{
-              backgroundColor: PDF_COLORS.lime,
-              boxShadow: `0 0 8px ${PDF_COLORS.lime}99`,
+              backgroundColor: c.lime,
+              boxShadow: `0 0 8px ${c.lime}99`,
             }}
           />
           {d.tag}
@@ -727,7 +744,7 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
           style={{
             fontSize: "clamp(2rem, 5vw, 3.5rem)",
             fontWeight: 800,
-            color: PDF_COLORS.lightText,
+            color: c.lightText,
             letterSpacing: "-0.02em",
           }}
         >
@@ -736,7 +753,7 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
         <p
           className="max-w-2xl leading-relaxed"
           style={{
-            color: `${PDF_COLORS.lightText}d9`,
+            color: `${c.lightText}d9`,
             fontSize: "clamp(1rem, 2vw, 1.25rem)",
           }}
         >
@@ -745,16 +762,16 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
         {d.sources && (
           <div
             className="mt-8 flex flex-wrap items-center justify-center gap-3"
-            style={{ color: `${PDF_COLORS.lightText}99` }}
+            style={{ color: `${c.lightText}99` }}
           >
             {d.sources.map((src, i) => (
               <span
                 key={i}
                 className="rounded-lg px-3 py-1.5 text-xs"
                 style={{
-                  border: `1px solid ${PDF_COLORS.lime}3a`,
-                  backgroundColor: `${PDF_COLORS.lime}14`,
-                  color: `${PDF_COLORS.lightText}cc`,
+                  border: `1px solid ${c.lime}3a`,
+                  backgroundColor: `${c.lime}14`,
+                  color: `${c.lightText}cc`,
                 }}
               >
                 {src}
@@ -778,7 +795,7 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
           style={{
             fontSize: "clamp(1.5rem, 3vw, 2.25rem)",
             fontWeight: 700,
-            color: isHero ? PDF_COLORS.lightText : PDF_COLORS.charcoal,
+            color: isHero ? c.lightText : c.charcoal,
             letterSpacing: "-0.01em",
           }}
         >
@@ -787,10 +804,10 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
         <div
           className="overflow-x-auto rounded-2xl mb-6"
           style={{
-            border: `1px solid ${PDF_COLORS.lime}33`,
+            border: `1px solid ${c.lime}33`,
             backgroundColor: isHero
-              ? `${PDF_COLORS.deepGreen}cc`
-              : PDF_COLORS.sage,
+              ? `${c.deepGreen}cc`
+              : c.sage,
             boxShadow:
               "0 4px 6px -1px rgba(20,83,45,0.08), 0 12px 24px -4px rgba(20,83,45,0.06)",
           }}
@@ -799,23 +816,23 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
             <thead>
               <tr
                 style={{
-                  borderBottom: `1px solid ${PDF_COLORS.lime}33`,
+                  borderBottom: `1px solid ${c.lime}33`,
                   backgroundColor: isHero
-                    ? `${PDF_COLORS.midGreen}99`
-                    : `${PDF_COLORS.sage}e6`,
+                    ? `${c.midGreen}99`
+                    : `${c.sage}e6`,
                 }}
               >
-                {(d.columns ?? []).map((c, ci) => (
+                {(d.columns ?? []).map((col, ci) => (
                   <th
                     key={String(ci)}
                     className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wide"
                     style={{
                       color: isHero
-                        ? PDF_COLORS.lightText
-                        : PDF_COLORS.deepGreen,
+                        ? c.lightText
+                        : c.deepGreen,
                     }}
                   >
-                    {String(c)}
+                    {String(col)}
                   </th>
                 ))}
               </tr>
@@ -825,11 +842,11 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
                 <tr
                   key={i}
                   className="transition-colors"
-                  style={{ borderBottom: `1px solid ${PDF_COLORS.lime}1a` }}
+                  style={{ borderBottom: `1px solid ${c.lime}1a` }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor = isHero
-                      ? `${PDF_COLORS.midGreen}88`
-                      : `${PDF_COLORS.sage}e6`;
+                      ? `${c.midGreen}88`
+                      : `${c.sage}e6`;
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor = "transparent";
@@ -842,8 +859,8 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
                         className="whitespace-nowrap px-4 py-3"
                         style={{
                           color: isHero
-                            ? `${PDF_COLORS.lightText}ee`
-                            : PDF_COLORS.charcoal,
+                            ? `${c.lightText}ee`
+                            : c.charcoal,
                           fontSize: "0.875rem",
                         }}
                       >
@@ -863,8 +880,8 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
                 <span
                   className="mt-1.5 h-2 w-2 shrink-0 rounded-full"
                   style={{
-                    backgroundColor: PDF_COLORS.lime,
-                    boxShadow: `0 0 8px ${PDF_COLORS.lime}55`,
+                    backgroundColor: c.lime,
+                    boxShadow: `0 0 8px ${c.lime}55`,
                   }}
                 />
                 <div>
@@ -873,8 +890,8 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
                       className="text-sm md:text-base leading-relaxed"
                       style={{
                         color: isHero
-                          ? `${PDF_COLORS.lightText}ee`
-                          : PDF_COLORS.charcoal,
+                          ? `${c.lightText}ee`
+                          : c.charcoal,
                       }}
                     >
                       {b}
@@ -885,8 +902,8 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
                         className="text-sm font-semibold"
                         style={{
                           color: isHero
-                            ? PDF_COLORS.lightText
-                            : PDF_COLORS.charcoal,
+                            ? c.lightText
+                            : c.charcoal,
                         }}
                       >
                         {b.heading}
@@ -895,8 +912,8 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
                         className="mt-1 text-sm leading-relaxed"
                         style={{
                           color: isHero
-                            ? `${PDF_COLORS.lightText}cc`
-                            : PDF_COLORS.mutedGreen,
+                            ? `${c.lightText}cc`
+                            : c.mutedGreen,
                         }}
                       >
                         {b.text}
@@ -909,13 +926,13 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
                               className="flex gap-2 text-xs"
                               style={{
                                 color: isHero
-                                  ? `${PDF_COLORS.lightText}aa`
-                                  : PDF_COLORS.mutedGreen,
+                                  ? `${c.lightText}aa`
+                                  : c.mutedGreen,
                               }}
                             >
                               <span
                                 className="mt-1.5 h-1 w-1 shrink-0 rounded-full"
-                                style={{ backgroundColor: PDF_COLORS.lime }}
+                                style={{ backgroundColor: c.lime }}
                               />
                               {item}
                             </li>
@@ -944,7 +961,7 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
           style={{
             fontSize: "clamp(1.5rem, 3vw, 2.25rem)",
             fontWeight: 700,
-            color: isHero ? PDF_COLORS.lightText : PDF_COLORS.charcoal,
+            color: isHero ? c.lightText : c.charcoal,
             letterSpacing: "-0.01em",
           }}
         >
@@ -957,9 +974,9 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
               className="rounded-2xl p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5"
               style={{
                 backgroundColor: isHero
-                  ? `${PDF_COLORS.midGreen}cc`
-                  : PDF_COLORS.sage,
-                border: `1px solid ${PDF_COLORS.lime}33`,
+                  ? `${c.midGreen}cc`
+                  : c.sage,
+                border: `1px solid ${c.lime}33`,
                 boxShadow:
                   "inset 0 1px 0 0 rgba(134,198,90,0.25), 0 4px 6px -1px rgba(20,83,45,0.08)",
               }}
@@ -967,7 +984,7 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
               <h3
                 className="text-sm font-semibold mb-2"
                 style={{
-                  color: isHero ? PDF_COLORS.lightText : PDF_COLORS.charcoal,
+                  color: isHero ? c.lightText : c.charcoal,
                 }}
               >
                 {card.title}
@@ -979,13 +996,13 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
                     className="flex gap-2 text-xs"
                     style={{
                       color: isHero
-                        ? `${PDF_COLORS.lightText}cc`
-                        : PDF_COLORS.mutedGreen,
+                        ? `${c.lightText}cc`
+                        : c.mutedGreen,
                     }}
                   >
                     <span
                       className="mt-1.5 h-1 w-1 shrink-0 rounded-full"
-                      style={{ backgroundColor: PDF_COLORS.lime }}
+                      style={{ backgroundColor: c.lime }}
                     />
                     {item}
                   </li>
@@ -998,11 +1015,11 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
           <div
             className="rounded-2xl p-5"
             style={{
-              border: `1px solid ${PDF_COLORS.lime}33`,
+              border: `1px solid ${c.lime}33`,
               backgroundColor: isHero
-                ? `${PDF_COLORS.midGreen}99`
-                : `${PDF_COLORS.sage}d9`,
-              color: isHero ? PDF_COLORS.lightText : PDF_COLORS.charcoal,
+                ? `${c.midGreen}99`
+                : `${c.sage}d9`,
+              color: isHero ? c.lightText : c.charcoal,
             }}
           >
             <p className="text-sm">
@@ -1026,7 +1043,7 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
         style={{
           fontSize: "clamp(1.5rem, 3vw, 2.25rem)",
           fontWeight: 700,
-          color: isHero ? PDF_COLORS.lightText : PDF_COLORS.charcoal,
+          color: isHero ? c.lightText : c.charcoal,
           letterSpacing: "-0.01em",
         }}
       >
@@ -1042,9 +1059,9 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
               className="rounded-2xl p-5 text-center transition-all duration-200 hover:-translate-y-0.5"
               style={{
                 backgroundColor: isHero
-                  ? `${PDF_COLORS.midGreen}cc`
-                  : PDF_COLORS.sage,
-                border: `1px solid ${PDF_COLORS.lime}33`,
+                  ? `${c.midGreen}cc`
+                  : c.sage,
+                border: `1px solid ${c.lime}33`,
                 boxShadow:
                   "inset 0 1px 0 0 rgba(134,198,90,0.25), 0 4px 6px -1px rgba(20,83,45,0.06)",
               }}
@@ -1053,7 +1070,7 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
               <p
                 className="text-sm font-semibold"
                 style={{
-                  color: isHero ? PDF_COLORS.lightText : PDF_COLORS.charcoal,
+                  color: isHero ? c.lightText : c.charcoal,
                 }}
               >
                 {p.label}
@@ -1062,8 +1079,8 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
                 className="text-xs mt-1"
                 style={{
                   color: isHero
-                    ? `${PDF_COLORS.lightText}cc`
-                    : PDF_COLORS.mutedGreen,
+                    ? `${c.lightText}cc`
+                    : c.mutedGreen,
                 }}
               >
                 {p.desc}
@@ -1082,9 +1099,9 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
               className="rounded-2xl p-5 text-center transition-all duration-200 hover:-translate-y-0.5"
               style={{
                 backgroundColor: isHero
-                  ? `${PDF_COLORS.midGreen}cc`
-                  : PDF_COLORS.sage,
-                border: `1px solid ${PDF_COLORS.lime}33`,
+                  ? `${c.midGreen}cc`
+                  : c.sage,
+                border: `1px solid ${c.lime}33`,
                 boxShadow:
                   "inset 0 1px 0 0 rgba(134,198,90,0.25), 0 4px 6px -1px rgba(20,83,45,0.06)",
               }}
@@ -1093,7 +1110,7 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
               <p
                 className="text-sm font-semibold"
                 style={{
-                  color: isHero ? PDF_COLORS.lightText : PDF_COLORS.charcoal,
+                  color: isHero ? c.lightText : c.charcoal,
                 }}
               >
                 {h.label}
@@ -1102,8 +1119,8 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
                 className="text-xs mt-1"
                 style={{
                   color: isHero
-                    ? `${PDF_COLORS.lightText}cc`
-                    : PDF_COLORS.mutedGreen,
+                    ? `${c.lightText}cc`
+                    : c.mutedGreen,
                 }}
               >
                 {h.desc}
@@ -1122,16 +1139,16 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
                 className="rounded-xl px-4 py-2 text-sm font-medium transition-all duration-200"
                 style={{
                   backgroundColor: isHero
-                    ? `${PDF_COLORS.midGreen}cc`
-                    : PDF_COLORS.sage,
-                  border: `1px solid ${PDF_COLORS.lime}33`,
-                  color: isHero ? PDF_COLORS.lightText : PDF_COLORS.charcoal,
+                    ? `${c.midGreen}cc`
+                    : c.sage,
+                  border: `1px solid ${c.lime}33`,
+                  color: isHero ? c.lightText : c.charcoal,
                 }}
               >
                 {step}
               </div>
               {i < d.flow!.length - 1 && (
-                <span className="text-lg" style={{ color: PDF_COLORS.lime }}>
+                <span className="text-lg" style={{ color: c.lime }}>
                   ↓
                 </span>
               )}
@@ -1149,9 +1166,9 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
               className="rounded-xl p-4 flex items-start gap-4 transition-all duration-200"
               style={{
                 backgroundColor: isHero
-                  ? `${PDF_COLORS.midGreen}a6`
-                  : PDF_COLORS.sage,
-                border: `1px solid ${PDF_COLORS.lime}2a`,
+                  ? `${c.midGreen}a6`
+                  : c.sage,
+                border: `1px solid ${c.lime}2a`,
                 boxShadow:
                   "inset 0 1px 0 0 rgba(134,198,90,0.20), 0 2px 4px -1px rgba(20,83,45,0.06)",
               }}
@@ -1159,9 +1176,9 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
               <div
                 className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-xs font-bold"
                 style={{
-                  backgroundColor: `${PDF_COLORS.lime}33`,
-                  color: isHero ? PDF_COLORS.lightText : PDF_COLORS.deepGreen,
-                  border: `1px solid ${PDF_COLORS.lime}55`,
+                  backgroundColor: `${c.lime}33`,
+                  color: isHero ? c.lightText : c.deepGreen,
+                  border: `1px solid ${c.lime}55`,
                 }}
               >
                 {i + 1}
@@ -1170,7 +1187,7 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
                 <p
                   className="text-sm font-semibold"
                   style={{
-                    color: isHero ? PDF_COLORS.lightText : PDF_COLORS.charcoal,
+                    color: isHero ? c.lightText : c.charcoal,
                   }}
                 >
                   {layer.label}
@@ -1179,8 +1196,8 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
                   className="text-xs mt-0.5"
                   style={{
                     color: isHero
-                      ? `${PDF_COLORS.lightText}cc`
-                      : PDF_COLORS.mutedGreen,
+                      ? `${c.lightText}cc`
+                      : c.mutedGreen,
                   }}
                 >
                   {layer.desc}
@@ -1198,8 +1215,8 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
             <span
               className="mt-1.5 h-2 w-2 shrink-0 rounded-full"
               style={{
-                backgroundColor: PDF_COLORS.lime,
-                boxShadow: `0 0 8px ${PDF_COLORS.lime}55`,
+                backgroundColor: c.lime,
+                boxShadow: `0 0 8px ${c.lime}55`,
               }}
             />
             <div>
@@ -1208,8 +1225,8 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
                   className="text-sm md:text-base leading-relaxed"
                   style={{
                     color: isHero
-                      ? `${PDF_COLORS.lightText}ee`
-                      : PDF_COLORS.charcoal,
+                      ? `${c.lightText}ee`
+                      : c.charcoal,
                   }}
                 >
                   {b}
@@ -1220,8 +1237,8 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
                     className="text-sm font-semibold"
                     style={{
                       color: isHero
-                        ? PDF_COLORS.lightText
-                        : PDF_COLORS.charcoal,
+                        ? c.lightText
+                        : c.charcoal,
                     }}
                   >
                     {b.heading}
@@ -1230,8 +1247,8 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
                     className="mt-1 text-sm leading-relaxed"
                     style={{
                       color: isHero
-                        ? `${PDF_COLORS.lightText}cc`
-                        : PDF_COLORS.mutedGreen,
+                        ? `${c.lightText}cc`
+                        : c.mutedGreen,
                     }}
                   >
                     {b.text}
@@ -1244,13 +1261,13 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
                           className="flex gap-2 text-xs"
                           style={{
                             color: isHero
-                              ? `${PDF_COLORS.lightText}aa`
-                              : PDF_COLORS.mutedGreen,
+                              ? `${c.lightText}aa`
+                              : c.mutedGreen,
                           }}
                         >
                           <span
                             className="mt-1.5 h-1 w-1 shrink-0 rounded-full"
-                            style={{ backgroundColor: PDF_COLORS.lime }}
+                            style={{ backgroundColor: c.lime }}
                           />
                           {item}
                         </li>
@@ -1273,15 +1290,15 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
               className="rounded-xl p-4 transition-all duration-200 hover:-translate-y-0.5"
               style={{
                 backgroundColor: isHero
-                  ? `${PDF_COLORS.midGreen}a6`
-                  : PDF_COLORS.sage,
-                border: `1px solid ${PDF_COLORS.lime}2a`,
+                  ? `${c.midGreen}a6`
+                  : c.sage,
+                border: `1px solid ${c.lime}2a`,
               }}
             >
               <p
                 className="text-sm"
                 style={{
-                  color: isHero ? PDF_COLORS.lightText : PDF_COLORS.charcoal,
+                  color: isHero ? c.lightText : c.charcoal,
                 }}
               >
                 {q}
@@ -1300,9 +1317,9 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
               className="rounded-2xl p-6 shadow-sm transition-all duration-200 hover:-translate-y-0.5"
               style={{
                 backgroundColor: isHero
-                  ? `${PDF_COLORS.midGreen}b3`
-                  : PDF_COLORS.sage,
-                border: `1px solid ${PDF_COLORS.lime}33`,
+                  ? `${c.midGreen}b3`
+                  : c.sage,
+                border: `1px solid ${c.lime}33`,
                 boxShadow:
                   "inset 0 1px 0 0 rgba(134,198,90,0.25), 0 4px 6px -1px rgba(20,83,45,0.06)",
               }}
@@ -1310,7 +1327,7 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
               <h3
                 className="text-sm font-semibold mb-3"
                 style={{
-                  color: isHero ? PDF_COLORS.lightText : PDF_COLORS.charcoal,
+                  color: isHero ? c.lightText : c.charcoal,
                 }}
               >
                 {col.heading}
@@ -1322,13 +1339,13 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
                     className="flex gap-2 text-sm"
                     style={{
                       color: isHero
-                        ? `${PDF_COLORS.lightText}cc`
-                        : PDF_COLORS.mutedGreen,
+                        ? `${c.lightText}cc`
+                        : c.mutedGreen,
                     }}
                   >
                     <span
                       className="mt-1.5 h-1 w-1 shrink-0 rounded-full"
-                      style={{ backgroundColor: PDF_COLORS.lime }}
+                      style={{ backgroundColor: c.lime }}
                     />
                     {item}
                   </li>
@@ -1347,7 +1364,17 @@ function Slide({ data, index }: { data: SlideData; index: number }) {
 /* ------------------------------------------------------------------ */
 export default function ResearchPage() {
   const [current, setCurrent] = useState(0);
+  const [isDark, setIsDark] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  /* --- Theme detection -------------------------------------------- */
+  useEffect(() => {
+    const checkDark = () => setIsDark(document.documentElement.classList.contains("dark"));
+    checkDark();
+    const observer = new MutationObserver(checkDark);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    return () => observer.disconnect();
+  }, []);
 
   const total = SLIDES.length;
 
@@ -1420,13 +1447,15 @@ export default function ResearchPage() {
     }
   };
 
+  const c = isDark ? DARK_COLORS : PDF_COLORS;
+
   return (
     <div
       className="relative z-10 h-screen overflow-hidden font-sans"
-      style={{ backgroundColor: PDF_COLORS.cream }}
+      style={{ backgroundColor: c.cream }}
     >
-      <ProgressBar current={current} total={total} />
-      <SlideCounter current={current} total={total} />
+      <ProgressBar current={current} total={total} isDark={isDark} />
+      <SlideCounter current={current} total={total} isDark={isDark} />
 
       {/* Top toolbar */}
       <div className="fixed top-14 right-4 z-40 hidden items-center gap-2 sm:flex">
@@ -1434,9 +1463,9 @@ export default function ResearchPage() {
           onClick={toggleFullscreen}
           className="rounded-xl px-3 py-1.5 text-xs font-medium shadow-sm backdrop-blur-md transition-colors"
           style={{
-            backgroundColor: `${PDF_COLORS.sage}cc`,
-            color: PDF_COLORS.deepGreen,
-            border: `1px solid ${PDF_COLORS.lime}55`,
+            backgroundColor: `${c.sage}cc`,
+            color: c.deepGreen,
+            border: `1px solid ${c.lime}55`,
           }}
         >
           Present
@@ -1461,7 +1490,7 @@ export default function ResearchPage() {
                   <div
                     className={`w-full rounded-3xl p-8 md:p-12 ${isHero ? "" : "glass-card"}`}
                   >
-                    <Slide data={slide} index={i} />
+                     <Slide data={slide} index={i} isDark={isDark} />
                   </div>
                 </div>
               );
@@ -1471,7 +1500,7 @@ export default function ResearchPage() {
           {/* Footer */}
           <footer
             className="py-8 text-center text-xs"
-            style={{ color: PDF_COLORS.mutedGreen }}
+            style={{ color: c.mutedGreen }}
           >
             <p>Research Proposal v3 — Prepared: August 2026</p>
           </footer>

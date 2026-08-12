@@ -254,31 +254,6 @@ function SidebarContent({
             </div>
           )}
         </motion.button>
-
-        {/* LOGOUT BUTTON */}
-        <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          onClick={onLogout}
-          className={`group relative flex w-full items-center justify-center gap-2.5 rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-white/5 px-3 py-2.5 text-xs font-medium text-slate-700 dark:text-slate-300 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] transition-all duration-200 hover:border-red-500/40 hover:bg-red-500/10 hover:text-red-600 dark:hover:text-red-400 ${
-            isCollapsed ? "px-0" : ""
-          }`}
-        >
-          <svg
-            className="h-4 w-4 shrink-0 transition-transform group-hover:-translate-x-0.5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={1.8}
-              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-            />
-          </svg>
-          {!isCollapsed && <span>Log out</span>}
-        </motion.button>
       </div>
     </div>
   );
