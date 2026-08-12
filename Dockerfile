@@ -47,8 +47,7 @@ COPY --from=ml /app/data/ /app/data/
 COPY --from=ml /app/results/ /app/results/
 COPY --from=ml /app/edge/ /app/edge/
 
-ENV NODE_ENV=production \
-    PORT=3000
+ENV NODE_ENV=production
 
 EXPOSE 3000
 
