@@ -357,7 +357,7 @@ export default function Simulator({
 
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
-      <div className="space-y-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/75 p-4 sm:p-6 shadow-[0_1px_2px_-1px_rgba(0,0,0,0.06),_0_4px_12px_-4px_rgba(0,0,0,0.08),_inset_0_1px_0_0_rgba(255,255,255,0.5),_inset_0_-1px_0_0_rgba(0,0,0,0.3)] backdrop-blur-[20px] saturate-170 lg:col-span-2">
+      <div className="space-y-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white/70 dark:bg-[#161923]/75 p-4 sm:p-6 shadow-[0_1px_2px_-1px_rgba(0,0,0,0.06),_0_4px_12px_-4px_rgba(0,0,0,0.08),_inset_0_1px_0_0_rgba(255,255,255,0.5),_inset_0_-1px_0_0_rgba(0,0,0,0.3)] backdrop-blur-[20px] saturate-170 lg:col-span-2">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <h2 className="text-lg font-semibold text-slate-900">
@@ -576,9 +576,7 @@ export default function Simulator({
       <div className="space-y-6 lg:col-span-3">
         <div
           className={`rounded-2xl p-6 text-white shadow-sm ${
-            action === "irrigate"
-              ? "bg-gradient-to-r from-amber-500 to-orange-500"
-              : "bg-gradient-to-r from-emerald-600 to-green-500"
+            action === "irrigate" ? "bg-amber-500" : "bg-emerald-700"
           }`}
         >
           <div className="flex flex-wrap items-center justify-between gap-4">
@@ -615,7 +613,7 @@ export default function Simulator({
           </p>
         </div>
 
-        <div className="rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/75 p-6 shadow-[0_1px_2px_-1px_rgba(0,0,0,0.06),_0_8px_20px_-4px_rgba(0,0,0,0.08),_inset_0_1px_0_0_rgba(255,255,255,0.5),_inset_0_-1px_0_0_rgba(0,0,0,0.3)] backdrop-blur-[20px] saturate-170">
+        <div className="rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white/70 dark:bg-[#161923]/75 p-6 shadow-[0_1px_2px_-1px_rgba(0,0,0,0.06),_0_8px_20px_-4px_rgba(0,0,0,0.08),_inset_0_1px_0_0_rgba(255,255,255,0.5),_inset_0_-1px_0_0_rgba(0,0,0,0.3)] backdrop-blur-[20px] saturate-170">
           <h3 className="mb-1 text-base font-semibold text-slate-900">
             How soil moisture changes the decision
           </h3>

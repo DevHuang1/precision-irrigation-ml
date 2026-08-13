@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Nav() {
   return (
-    <nav className="mb-6 flex items-center justify-between rounded-[18px] border border-slate-200/50 dark:border-white/10 bg-white/45 dark:bg-slate-900/55 px-4 py-2.5 shadow-[0_1px_2px_-1px_rgba(0,0,0,0.06),_0_4px_12px_-4px_rgba(0,0,0,0.08),_inset_0_1px_0_0_rgba(255,255,255,0.6),_inset_0_-1px_0_0_rgba(0,0,0,0.3)] backdrop-blur-[20px] saturate-180">
+    <nav className="mb-6 flex items-center justify-between rounded-[18px] border border-slate-200/50 dark:border-white/10 bg-white/45 dark:bg-[#0f1117]/55 px-4 py-2.5 shadow-[0_1px_2px_-1px_rgba(0,0,0,0.06),_0_4px_12px_-4px_rgba(0,0,0,0.08),_inset_0_1px_0_0_rgba(255,255,255,0.6),_inset_0_-1px_0_0_rgba(0,0,0,0.3)] backdrop-blur-[20px] saturate-180">
       <span className="text-sm font-semibold text-slate-800">
         Precision Irrigation
       </span>

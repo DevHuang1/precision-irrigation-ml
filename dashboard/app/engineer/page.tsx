@@ -91,7 +91,7 @@ export default function EngineerPage() {
           <div className="flex flex-wrap items-center gap-3">
             <button
               onClick={handleExport}
-              className="flex items-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 px-4 py-2 text-xs font-bold text-white shadow-lg shadow-emerald-500/20 hover:brightness-110 active:scale-95 transition-all"
+              className="flex items-center gap-2 rounded-2xl bg-emerald-600 px-4 py-2 text-xs font-bold text-white shadow-lg shadow-emerald-600/20 hover:brightness-110 active:scale-95 transition-all"
             >
               <svg
                 className="h-4 w-4"
@@ -118,7 +118,7 @@ export default function EngineerPage() {
         )}
 
         {/* SECTION 1: MODEL PERFORMANCE LEADERBOARD */}
-        <section className="rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-slate-900/75 p-6 shadow-[0_1px_2px_-1px_rgba(0,0,0,0.06),_0_8px_20px_-4px_rgba(0,0,0,0.08),_inset_0_1px_0_0_rgba(255,255,255,0.5),_inset_0_-1px_0_0_rgba(0,0,0,0.3)] backdrop-blur-[20px] saturate-170">
+        <section className="rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-[#161923]/75 p-6 shadow-[0_1px_2px_-1px_rgba(0,0,0,0.06),_0_8px_20px_-4px_rgba(0,0,0,0.08),_inset_0_1px_0_0_rgba(255,255,255,0.5),_inset_0_-1px_0_0_rgba(0,0,0,0.3)] backdrop-blur-[20px] saturate-170">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
             <div>
               <h2 className="text-lg font-bold text-slate-900 dark:text-white">
@@ -208,7 +208,7 @@ export default function EngineerPage() {
         {/* SECTION 2: FEATURE IMPORTANCES & CONFUSION MATRIX */}
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           {/* FEATURE IMPORTANCE */}
-          <section className="rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-slate-900/75 p-6 shadow-[0_1px_2px_-1px_rgba(0,0,0,0.06),_0_8px_20px_-4px_rgba(0,0,0,0.08),_inset_0_1px_0_0_rgba(255,255,255,0.5),_inset_0_-1px_0_0_rgba(0,0,0,0.3)] backdrop-blur-[20px] saturate-170">
+          <section className="rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-[#161923]/75 p-6 shadow-[0_1px_2px_-1px_rgba(0,0,0,0.06),_0_8px_20px_-4px_rgba(0,0,0,0.08),_inset_0_1px_0_0_rgba(255,255,255,0.5),_inset_0_-1px_0_0_rgba(0,0,0,0.3)] backdrop-blur-[20px] saturate-170">
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">
               Feature Importance & SHAP Attribution
             </h2>
@@ -260,7 +260,7 @@ export default function EngineerPage() {
           </section>
 
           {/* CONFUSION MATRIX */}
-          <section className="rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-slate-900/75 p-6 shadow-[0_1px_2px_-1px_rgba(0,0,0,0.06),_0_8px_20px_-4px_rgba(0,0,0,0.08),_inset_0_1px_0_0_rgba(255,255,255,0.5),_inset_0_-1px_0_0_rgba(0,0,0,0.3)] backdrop-blur-[20px] saturate-170">
+          <section className="rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-[#161923]/75 p-6 shadow-[0_1px_2px_-1px_rgba(0,0,0,0.06),_0_8px_20px_-4px_rgba(0,0,0,0.08),_inset_0_1px_0_0_rgba(255,255,255,0.5),_inset_0_-1px_0_0_rgba(0,0,0,0.3)] backdrop-blur-[20px] saturate-170">
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">
               Confusion Matrix ({selectedModel})
             </h2>
@@ -321,7 +321,7 @@ export default function EngineerPage() {
         </div>
 
         {/* SECTION 3: EDGE COMPILER & CONVERSION TOOL */}
-        <section className="rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-slate-900/75 p-6 shadow-[0_1px_2px_-1px_rgba(0,0,0,0.06),_0_8px_20px_-4px_rgba(0,0,0,0.08),_inset_0_1px_0_0_rgba(255,255,255,0.5),_inset_0_-1px_0_0_rgba(0,0,0,0.3)] backdrop-blur-[20px] saturate-170">
+        <section className="rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-[#161923]/75 p-6 shadow-[0_1px_2px_-1px_rgba(0,0,0,0.06),_0_8px_20px_-4px_rgba(0,0,0,0.08),_inset_0_1px_0_0_rgba(255,255,255,0.5),_inset_0_-1px_0_0_rgba(0,0,0,0.3)] backdrop-blur-[20px] saturate-170">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
               <h2 className="text-lg font-bold text-slate-900 dark:text-white">

@@ -161,7 +161,7 @@ export default function FarmerView() {
               onClick={() => setSimMode((v) => !v)}
               className={`rounded-full px-4 py-2 text-sm font-semibold transition-all ${
                 simMode
-                  ? "bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-[0_4px_20px_-2px_rgba(16,185,129,0.3)] active:scale-95"
+                  ? "bg-emerald-600 text-white shadow-[0_4px_20px_-2px_rgba(16,185,129,0.3)] active:scale-95"
                   : "border border-emerald-600/30 dark:border-emerald-500/40 text-emerald-600 dark:text-emerald-400 hover:bg-white/30 dark:hover:bg-emerald-950/30 active:scale-95"
               }`}
             >

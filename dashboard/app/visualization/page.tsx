@@ -106,7 +106,7 @@ function SensorDroplet({ active }: { active: boolean }) {
       transition={
         active ? { duration: 1.1, repeat: Infinity } : { duration: 0.2 }
       }
-      className="inline-flex h-3.5 w-3.5 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 shadow-[0_0_10px_rgba(16,185,129,0.8)]"
+      className="inline-flex h-3.5 w-3.5 items-center justify-center rounded-full bg-emerald-500"
     >
       <span className="h-1 w-1 rounded-full bg-white" />
     </motion.span>
@@ -293,7 +293,7 @@ export default function VisualizationPage() {
           <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={() => setPlay((v) => !v)}
-              className="flex items-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 px-4 py-2 text-xs font-bold text-white shadow-lg shadow-emerald-500/20 hover:brightness-110 active:scale-95 transition-all"
+              className="flex items-center gap-2 rounded-2xl bg-emerald-600 px-4 py-2 text-xs font-bold text-white shadow-lg shadow-emerald-600/20 hover:brightness-110 active:scale-95 transition-all"
             >
               {play ? (
                 <>
@@ -342,7 +342,7 @@ export default function VisualizationPage() {
         </header>
 
         {/* ==================== STEP INDICATOR ==================== */}
-        <div className="flex flex-col gap-3 rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-slate-900/75 p-3 backdrop-blur-xl shadow-sm sm:flex-row sm:items-center">
+        <div className="flex flex-col gap-3 rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-[#161923]/75 p-3 backdrop-blur-xl shadow-sm sm:flex-row sm:items-center">
           {STEPS.map((s, i) => {
             const isActive = phase === s.key;
             const isDone = stepIndex[s.key as Phase] < stepIndex[phase];
@@ -351,7 +351,7 @@ export default function VisualizationPage() {
                 <div
                   className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl text-sm font-bold transition-all ${
                     isActive
-                      ? "bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-[0_0_16px_rgba(16,185,129,0.4)]"
+                      ? "bg-emerald-600 text-white shadow-[0_0_16px_rgba(16,185,129,0.4)]"
                       : isDone
                         ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400"
                         : "bg-slate-100 dark:bg-slate-800 text-slate-400"
@@ -384,7 +384,7 @@ export default function VisualizationPage() {
         </div>
 
         {/* ==================== SVG PIPELINE ==================== */}
-        <div className="rounded-3xl border border-slate-200/80 dark:border-white/10 bg-gradient-to-br from-white/80 via-white/60 to-emerald-50/50 dark:from-slate-900/75 dark:via-slate-900/55 dark:to-slate-950/70 p-3 shadow-[0_1px_2px_-1px_rgba(0,0,0,0.06),_0_12px_32px_-8px_rgba(0,0,0,0.12),inset_0_1px_0_0_rgba(255,255,255,0.5)] backdrop-blur-2xl">
+        <div className="rounded-3xl border border-slate-200/80 dark:border-white/10 bg-white/80 dark:bg-[#12151d]/75 p-3 shadow-[0_1px_2px_-1px_rgba(0,0,0,0.06),_0_12px_32px_-8px_rgba(0,0,0,0.12),inset_0_1px_0_0_rgba(255,255,255,0.5)] backdrop-blur-2xl">
           <svg
             viewBox="0 0 1200 640"
             className="h-auto w-full"
@@ -870,7 +870,7 @@ export default function VisualizationPage() {
         {/* ==================== LIVE EVENT FEED + EXPLAINER ==================== */}
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           {/* Event feed */}
-          <div className="rounded-3xl border border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-slate-900/75 p-5 shadow-[0_1px_2px_-1px_rgba(0,0,0,0.06),_0_8px_20px_-4px_rgba(0,0,0,0.08)] backdrop-blur-2xl">
+          <div className="rounded-3xl border border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-[#161923]/75 p-5 shadow-[0_1px_2px_-1px_rgba(0,0,0,0.06),_0_8px_20px_-4px_rgba(0,0,0,0.08)] backdrop-blur-2xl">
             <div className="mb-3 flex items-center justify-between">
               <h2 className="text-base font-bold text-slate-900 dark:text-white">
                 📡 Live event feed
@@ -920,7 +920,7 @@ export default function VisualizationPage() {
           </div>
 
           {/* Explainer of the loop */}
-          <div className="rounded-3xl border border-slate-200/80 dark:border-white/10 bg-gradient-to-br from-emerald-50/70 to-teal-50/50 dark:from-emerald-950/30 dark:to-slate-900/75 p-5 shadow-[0_1px_2px_-1px_rgba(0,0,0,0.06),_0_8px_20px_-4px_rgba(0,0,0,0.08)] backdrop-blur-2xl">
+          <div className="rounded-3xl border border-slate-200/80 dark:border-white/10 bg-emerald-50/70 dark:bg-[#12151d]/75 p-5 shadow-[0_1px_2px_-1px_rgba(0,0,0,0.06),_0_8px_20px_-4px_rgba(0,0,0,0.08)] backdrop-blur-2xl">
             <h2 className="mb-3 text-base font-bold text-slate-900 dark:text-white">
               🔁 What you're watching
             </h2>

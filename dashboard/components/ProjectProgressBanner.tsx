@@ -59,11 +59,7 @@ export default function ProjectProgressBanner({
   ];
 
   return (
-    <div className="relative mb-8 overflow-hidden rounded-2xl border border-slate-200/80 dark:border-white/10 bg-gradient-to-br from-white/90 via-white/80 to-slate-50/90 dark:from-slate-900/80 dark:via-slate-900/60 dark:to-slate-950/80 p-6 shadow-[0_1px_2px_-1px_rgba(0,0,0,0.06),_0_8px_20px_-4px_rgba(0,0,0,0.08),_0_0_0_1px_rgba(255,255,255,0.3),_inset_0_1px_0_0_rgba(255,255,255,0.5),_inset_0_-1px_0_0_rgba(0,0,0,0.3)] dark:shadow-[0_0_0_1px_rgba(255,255,255,0.08),_inset_0_1px_0_0_rgba(255,255,255,0.4),_inset_0_-1px_0_0_rgba(0,0,0,0.4)] backdrop-blur-2xl saturate-170 transition-all">
-      {/* Background Specular Ambient Orbs */}
-      <div className="pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full bg-emerald-500/10 dark:bg-emerald-500/15 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-blue-500/10 dark:bg-cyan-500/15 blur-3xl" />
-
+    <div className="relative mb-8 overflow-hidden rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/85 dark:bg-[#12151d]/80 p-6 shadow-[0_1px_2px_-1px_rgba(0,0,0,0.06),_0_8px_20px_-4px_rgba(0,0,0,0.08),_0_0_0_1px_rgba(255,255,255,0.3),_inset_0_1px_0_0_rgba(255,255,255,0.5),_inset_0_-1px_0_0_rgba(0,0,0,0.3)] dark:shadow-[0_0_0_1px_rgba(255,255,255,0.08),_inset_0_1px_0_0_rgba(255,255,255,0.4),_inset_0_-1px_0_0_rgba(0,0,0,0.4)] backdrop-blur-2xl saturate-170 transition-all">
       {/* TOP HEADER & LIVE STATUS BAR */}
       <div className="relative z-10 flex flex-wrap items-center justify-between gap-4 border-b border-slate-200/70 dark:border-white/10 pb-5">
         <div>
@@ -129,7 +125,7 @@ export default function ProjectProgressBanner({
         {activeTab === "overview" && (
           <div className="space-y-6">
             {/* OVERALL COMPLETION PROGRESS BAR */}
-            <div className="rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/60 dark:bg-slate-900/40 p-4 backdrop-blur-md shadow-sm">
+            <div className="rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/60 dark:bg-[#12151d]/40 p-4 backdrop-blur-md shadow-sm">
               <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
@@ -150,7 +146,7 @@ export default function ProjectProgressBanner({
                   initial={{ width: "0%" }}
                   animate={{ width: "84.5%" }}
                   transition={{ duration: 1.2, ease: "easeOut" }}
-                  className="h-full rounded-full bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-500 shadow-[0_0_12px_rgba(16,185,129,0.5)]"
+                  className="h-full rounded-full bg-emerald-500"
                 />
               </div>
 
@@ -167,7 +163,7 @@ export default function ProjectProgressBanner({
             {/* 4 CORE KPI SaaS WIDGETS */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {/* Widget 1: Efficiency */}
-              <div className="group rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-slate-900/40 p-4 shadow-sm hover:shadow-md transition-all">
+              <div className="group rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-[#12151d]/40 p-4 shadow-sm hover:shadow-md transition-all">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
                     Water Efficiency
@@ -190,7 +186,7 @@ export default function ProjectProgressBanner({
               </div>
 
               {/* Widget 2: Water Saved */}
-              <div className="group rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-slate-900/40 p-4 shadow-sm hover:shadow-md transition-all">
+              <div className="group rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-[#12151d]/40 p-4 shadow-sm hover:shadow-md transition-all">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
                     Cumulative Water Saved
@@ -213,7 +209,7 @@ export default function ProjectProgressBanner({
               </div>
 
               {/* Widget 3: AI Model Accuracy */}
-              <div className="group rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-slate-900/40 p-4 shadow-sm hover:shadow-md transition-all">
+              <div className="group rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-[#12151d]/40 p-4 shadow-sm hover:shadow-md transition-all">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
                     Best Model (Macro-F1)
@@ -236,7 +232,7 @@ export default function ProjectProgressBanner({
               </div>
 
               {/* Widget 4: Active Telemetry */}
-              <div className="group rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-slate-900/40 p-4 shadow-sm hover:shadow-md transition-all">
+              <div className="group rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-[#12151d]/40 p-4 shadow-sm hover:shadow-md transition-all">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
                     Total Ingested Sensors
@@ -271,7 +267,7 @@ export default function ProjectProgressBanner({
                     ? "border-emerald-500/30 bg-emerald-500/5 dark:bg-emerald-950/20 text-emerald-900 dark:text-emerald-100"
                     : m.status === "active"
                       ? "border-blue-500/40 bg-blue-500/10 dark:bg-blue-950/30 text-blue-900 dark:text-blue-100 ring-2 ring-blue-500/20"
-                      : "border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/30 text-slate-500 opacity-70"
+                      : "border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-[#12151d]/30 text-slate-500 opacity-70"
                 }`}
               >
                 <div className="flex items-center justify-between text-xs font-semibold">
@@ -303,7 +299,7 @@ export default function ProjectProgressBanner({
 
         {activeTab === "impact" && (
           <div className="grid gap-4 sm:grid-cols-3">
-            <div className="rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/60 dark:bg-slate-900/40 p-4">
+            <div className="rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/60 dark:bg-[#12151d]/40 p-4">
               <span className="text-2xl">🌱</span>
               <h4 className="mt-2 text-sm font-bold text-slate-900 dark:text-white">
                 Yield Improvement
@@ -313,7 +309,7 @@ export default function ProjectProgressBanner({
                 soil-moisture maintenance.
               </p>
             </div>
-            <div className="rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/60 dark:bg-slate-900/40 p-4">
+            <div className="rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/60 dark:bg-[#12151d]/40 p-4">
               <span className="text-2xl">⚡</span>
               <h4 className="mt-2 text-sm font-bold text-slate-900 dark:text-white">
                 Energy Consumption
@@ -323,7 +319,7 @@ export default function ProjectProgressBanner({
                 sensor-triggered relay switches.
               </p>
             </div>
-            <div className="rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/60 dark:bg-slate-900/40 p-4">
+            <div className="rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/60 dark:bg-[#12151d]/40 p-4">
               <span className="text-2xl">👨‍🌾</span>
               <h4 className="mt-2 text-sm font-bold text-slate-900 dark:text-white">
                 Farmer Cost Savings

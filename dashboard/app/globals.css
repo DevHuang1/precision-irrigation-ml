@@ -29,8 +29,13 @@
 }
 
 .dark {
-  --background: #090d16;
+  --background: #0b0e14;
   --foreground: #f8fafc;
+}
+
+/* Flat dark surface — depth comes from content layering, not gradients */
+.dark body {
+  background-color: var(--background);
 }
 
 @layer base {
@@ -86,7 +91,7 @@
       background-color: rgba(255, 255, 255, 0.95);
     }
     .dark .bg-slate-900\/75 {
-      background-color: rgba(15, 23, 32, 0.98);
+      background-color: rgba(22, 25, 35, 0.98);
     }
   }
 }
@@ -124,12 +129,16 @@
     --glass-thin-border: rgba(255, 255, 255, 0.3);
     --glass-thin-rim: rgba(255, 255, 255, 0.6);
 
-    /* Medium Glass — green-tinted for slide cards */
+    /* Medium Glass — green-tinted for slide cards (light), neutral dark */
     --glass-medium-light: rgba(228, 241, 217, 0.65);
-    --glass-medium-dark: rgba(20, 83, 45, 0.75);
+    --glass-medium-dark: rgba(22, 25, 35, 0.75);
     --glass-medium-border: rgba(134, 198, 90, 0.25);
     --glass-medium-rim: rgba(134, 198, 90, 0.45);
     --glass-medium-shadow: rgba(20, 83, 45, 0.2);
+
+    /* Dark glass rim tokens — white-alpha specular per Liquid Glass spec */
+    --glass-dark-border: rgba(255, 255, 255, 0.08);
+    --glass-dark-rim: rgba(255, 255, 255, 0.15);
 
     /* Thick Glass */
     --glass-thick-light: rgba(248, 249, 252, 0.88);
@@ -190,12 +199,12 @@
   .dark .glass-card {
     background: color-mix(
       in srgb,
-      var(--glass-medium-dark, rgba(20, 83, 45, 0.75)) 85%,
+      var(--glass-medium-dark, rgba(22, 25, 35, 0.75)) 85%,
       transparent
     );
-    border: 1px solid rgba(134, 198, 90, 0.12);
+    border: 1px solid var(--glass-dark-border, rgba(255, 255, 255, 0.08));
     box-shadow:
-      inset 0 1px 0 0 rgba(134, 198, 90, 0.18),
+      inset 0 1px 0 0 var(--glass-dark-rim, rgba(255, 255, 255, 0.15)),
       inset 0 -1px 0 0 rgba(0, 0, 0, 0.35),
       0 4px 6px -1px rgba(0, 0, 0, 0.25),
       0 12px 24px -4px rgba(0, 0, 0, 0.35);
@@ -212,9 +221,9 @@
   }
 
   .dark .glass-card:hover {
-    border-color: rgba(134, 198, 90, 0.22);
+    border-color: rgba(255, 255, 255, 0.2);
     box-shadow:
-      inset 0 1px 0 0 rgba(134, 198, 90, 0.25),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.3),
       inset 0 -1px 0 0 rgba(0, 0, 0, 0.35),
       0 8px 16px -2px rgba(0, 0, 0, 0.3),
       0 20px 32px -4px rgba(0, 0, 0, 0.4);
@@ -236,9 +245,9 @@
   }
 
   .dark .glass-thin {
-    background: rgba(20, 83, 45, 0.55);
-    border: 1px solid rgba(134, 198, 90, 0.12);
-    box-shadow: inset 0 1px 0 0 rgba(134, 198, 90, 0.18);
+    background: rgba(15, 17, 23, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.25);
   }
 
   /* ------------------------------------------------------------------ */

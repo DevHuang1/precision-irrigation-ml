@@ -15,19 +15,19 @@ interface GlassCardProps {
 
 const variantClasses: Record<GlassVariant, string> = {
   thin:
-    "bg-white/45 dark:bg-slate-900/55 " +
+    "bg-white/45 dark:bg-[#0f1117]/55 " +
     "after:pointer-events-none after:absolute after:inset-0 " +
     "after:rounded-[inherit] " +
     "after:border after:border-white/30 dark:after:border-white/8 " +
     "after:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.6)]",
   medium:
-    "bg-white/70 dark:bg-slate-900/75 " +
+    "bg-white/70 dark:bg-[#161923]/75 " +
     "after:pointer-events-none after:absolute after:inset-0 " +
     "after:rounded-[inherit] " +
     "after:border after:border-white/15 dark:after:border-white/8 " +
     "after:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.5),inset_0_-1px_0_0_rgba(0,0,0,0.3)]",
   thick:
-    "bg-white/88 dark:bg-slate-950/92 " +
+    "bg-white/88 dark:bg-[#0a0c10]/92 " +
     "after:pointer-events-none after:absolute after:inset-0 " +
     "after:rounded-[inherit] " +
     "after:border after:border-white/8 dark:after:border-white/5 " +
@@ -55,7 +55,7 @@ export const GlassCard = forwardRef<HTMLDivElement, GlassCardProps>(
     const baseClasses = [
       "relative isolate overflow-hidden rounded-[18px] transition-all duration-200",
       "backdrop-blur-[20px] saturate-170",
-      "supports-[backdrop-filter]:bg-white/70 supports-[backdrop-filter]:dark:bg-slate-900/75",
+      "supports-[backdrop-filter]:bg-white/70 supports-[backdrop-filter]:dark:bg-[#161923]/75",
       variantClasses[variant],
       shadowClasses[variant],
        paddingClasses[padding],

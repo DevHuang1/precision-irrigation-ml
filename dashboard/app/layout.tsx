@@ -15,7 +15,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="h-full antialiased font-sans squircle">
-      <body className="h-full bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans selection:bg-emerald-500/30 transition-bg duration-300">
+      <body className="h-full bg-slate-50 text-slate-900 dark:text-slate-100 font-sans selection:bg-emerald-500/30 transition-bg duration-300">
         <ResearchSidebar />
         <main className="min-h-screen transition-all duration-300 pt-16 md:pt-0 md:pl-72">
           {children}

@@ -78,7 +78,7 @@ export default function ResearchSidebar({
       {/* --- MOBILE TRIGGER BUTTON --- */}
       <button
         onClick={() => setIsMobileOpen(true)}
-        className="fixed top-4 left-4 z-50 flex h-10 w-10 items-center justify-center rounded-2xl bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200/80 dark:border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8),_0_8px_20px_rgba(0,0,0,0.06)] text-slate-800 dark:text-slate-100 transition-transform active:scale-95 md:hidden"
+        className="fixed top-4 left-4 z-50 flex h-10 w-10 items-center justify-center rounded-2xl bg-white/80 dark:bg-[#0f1117]/85 backdrop-blur-xl border border-slate-200/80 dark:border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8),_0_8px_20px_rgba(0,0,0,0.06)] text-slate-800 dark:text-slate-100 transition-transform active:scale-95 md:hidden"
         aria-label="Open Navigation Drawer"
       >
         <MenuIcon />
@@ -102,7 +102,7 @@ export default function ResearchSidebar({
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: "-100%", opacity: 0 }}
               transition={{ type: "spring", stiffness: 350, damping: 32 }}
-              className="fixed top-2 left-2 bottom-2 z-50 w-[280px] rounded-3xl bg-white/90 dark:bg-slate-900/70 backdrop-blur-2xl border border-slate-200/80 dark:border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.9),_0_20px_50px_rgba(0,0,0,0.1)] flex flex-col p-4 md:hidden overflow-hidden"
+              className="fixed top-2 left-2 bottom-2 z-50 w-[280px] rounded-3xl bg-white/90 dark:bg-[#12151d]/80 backdrop-blur-2xl border border-slate-200/80 dark:border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.9),_0_20px_50px_rgba(0,0,0,0.1)] flex flex-col p-4 md:hidden overflow-hidden"
             >
               <SidebarContent
                 pathname={pathname}
@@ -121,12 +121,8 @@ export default function ResearchSidebar({
       <motion.aside
         animate={{ width: isCollapsed ? 84 : 280 }}
         transition={{ type: "spring", stiffness: 350, damping: 32 }}
-        className="fixed top-3 left-3 bottom-3 z-40 hidden md:flex flex-col rounded-2xl bg-white/85 dark:bg-slate-900/50 backdrop-blur-2xl saturate-170 border border-slate-200/80 dark:border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.9),_0_20px_40px_-15px_rgba(0,0,0,0.06)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),_0_25px_50px_-12px_rgba(0,0,0,0.5)] p-3 overflow-hidden ${className}"
+        className="fixed top-3 left-3 bottom-3 z-40 hidden md:flex flex-col rounded-2xl bg-white/85 dark:bg-[#12151d]/60 backdrop-blur-2xl saturate-170 border border-slate-200/80 dark:border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.9),_0_20px_40px_-15px_rgba(0,0,0,0.06)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),_0_25px_50px_-12px_rgba(0,0,0,0.5)] p-3 overflow-hidden ${className}"
       >
-        {/* Specular Ambient Glow Orbs */}
-        <div className="pointer-events-none absolute -top-20 -left-20 h-44 w-44 rounded-full bg-emerald-500/10 dark:bg-emerald-500/15 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-20 -right-20 h-44 w-44 rounded-full bg-teal-500/10 dark:bg-cyan-500/15 blur-3xl" />
-
         <SidebarContent
           pathname={pathname}
           isCollapsed={isCollapsed}
@@ -161,7 +157,7 @@ function SidebarContent({
         <div className="flex items-center justify-between px-2 py-3">
           <div className="flex items-center gap-3">
             {/* Glowing Brand Badge */}
-            <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 via-teal-600 to-green-700 text-xs font-bold text-white shadow-[0_0_20px_rgba(16,185,129,0.35),_inset_0_1px_1px_rgba(255,255,255,0.6)]">
+            <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-emerald-600 text-xs font-bold text-white shadow-[0_2px_6px_-1px_rgba(0,0,0,0.25),_inset_0_1px_1px_rgba(255,255,255,0.35)]">
               PI
             </div>
             {!isCollapsed && (
@@ -275,7 +271,7 @@ function SidebarLink({
       {active && (
         <motion.div
           layoutId="activeLiquidPill"
-          className="pointer-events-none absolute inset-0 rounded-2xl bg-white/90 dark:bg-white/15 backdrop-blur-md border border-slate-200/90 dark:border-white/20 shadow-[0_4px_20px_rgba(0,0,0,0.06),_inset_0_1px_1px_rgba(255,255,255,1)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.3),_0_0_15px_rgba(16,185,129,0.25)]"
+          className="pointer-events-none absolute inset-0 rounded-2xl bg-white/90 dark:bg-white/15 backdrop-blur-md border border-slate-200/90 dark:border-white/20 shadow-[0_4px_20px_rgba(0,0,0,0.06),_inset_0_1px_1px_rgba(255,255,255,1)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.3)]"
           transition={{
             type: "spring",
             stiffness: 380,
@@ -300,7 +296,7 @@ function SidebarLink({
       {active && (
         <motion.div
           layoutId="activeDot"
-          className="relative z-10 ml-auto h-1.5 w-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 shadow-[0_0_8px_#10b981]"
+          className="relative z-10 ml-auto h-1.5 w-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400"
           transition={{
             type: "spring",
             stiffness: 380,

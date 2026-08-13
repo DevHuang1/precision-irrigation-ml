@@ -297,7 +297,7 @@ function PhaseCard({ phase, index }: { phase: Phase; index: number }) {
       <GlassCard variant="medium" padding="lg" className="h-full">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="flex min-w-0 items-center gap-3">
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500/20 to-teal-600/20 text-xl">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-emerald-500/20 text-xl">
               {phase.icon}
             </div>
             <div className="min-w-0">
@@ -523,7 +523,7 @@ export default function ProgressPage() {
             {activePhase && (
               <GlassCard variant="medium" padding="lg" className="h-full">
                 <div className="flex items-center gap-3">
-                  <div className="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 text-2xl shadow-[0_0_20px_rgba(245,158,11,0.3)]">
+                  <div className="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-500 text-2xl shadow-[0_2px_6px_-1px_rgba(0,0,0,0.25)]">
                     {activePhase.icon}
                     <motion.span
                       className="absolute -top-1 -right-1 flex h-3 w-3"
