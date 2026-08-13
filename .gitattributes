@@ -1,1 +1,8 @@
 *.csv filter=lfs diff=lfs merge=lfs -text
+
+# Converted CSVs must be regular files so the dashboard reads them on
+# deployment (Railway does not fetch Git LFS objects during Docker builds)
+data/real_datasets/unipr_tomato_evolving/converted/unipr_tomato_evolving.csv -filter -diff -merge text
+data/real_datasets/kaggle_orig_irrigation/converted/kaggle_orig_irrigation.csv -filter -diff -merge text
+data/real_datasets/kaggle_pi_iot/converted/kaggle_pi_iot.csv -filter -diff -merge text
+data/real_datasets/kaggle_sa/converted/kaggle_sa.csv -filter -diff -merge text
