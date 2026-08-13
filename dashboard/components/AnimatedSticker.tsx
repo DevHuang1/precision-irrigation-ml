@@ -26,12 +26,20 @@ export default function AnimatedSticker({
   const [isLoaded, setIsLoaded] = useState(false);
   const [currentFrameIndex, setCurrentFrameIndex] = useState(0);
 
-  const dragStartRef = useRef({ x: 0, y: 0 });
-  const positionStartRef = useRef({ x: 0, y: 0 });
-  const hasMovedRef = useRef(false);
-  const frameIndexRef = useRef(0);
-  const lastTickRef = useRef(0);
-  const rafRef = useRef<number | null>(null);
+  const dragStateRef = useRef({
+    active: false,
+    startX: 0,
+    startY: 0,
+    originX: 0,
+    originY: 0,
+    moved: false,
+  });
+
+  const frameStateRef = useRef({
+    index: 0,
+    lastTick: 0,
+    raf: null as number | null,
+  });
 
   const frameRange = useMemo(() => {
     if (state === "resting") {
@@ -40,12 +48,12 @@ export default function AnimatedSticker({
     return { start: 0, end: 4 };
   }, [state]);
 
-  const frameWidth = 1536 / COLS;
-  const frameHeight = 1024 / ROWS;
+  const frameWidth = Math.floor(1536 / COLS);
+  const frameHeight = Math.floor(1024 / ROWS);
 
   useEffect(() => {
-    frameIndexRef.current = frameRange.start;
-    lastTickRef.current = 0;
+    frameStateRef.current.index = frameRange.start;
+    frameStateRef.current.lastTick = 0;
     setCurrentFrameIndex(frameRange.start);
   }, [state, frameRange.start]);
 
@@ -59,111 +67,92 @@ export default function AnimatedSticker({
   useEffect(() => {
     if (!isLoaded) return;
 
-    const animate = (timestamp: number) => {
-      if (!lastTickRef.current) {
-        lastTickRef.current = timestamp;
+    const tick = (timestamp: number) => {
+      const frame = frameStateRef.current;
+      if (!frame.lastTick) {
+        frame.lastTick = timestamp;
       }
 
-      const speed = 400;
-      const elapsed = timestamp - lastTickRef.current;
-
-      if (elapsed >= speed) {
-        lastTickRef.current = timestamp - (elapsed % speed);
-        frameIndexRef.current += 1;
-        if (frameIndexRef.current > frameRange.end) {
-          frameIndexRef.current = frameRange.start;
+      const elapsed = timestamp - frame.lastTick;
+      if (elapsed >= 400) {
+        frame.lastTick = timestamp - (elapsed % 400);
+        frame.index += 1;
+        if (frame.index > frameRange.end) {
+          frame.index = frameRange.start;
         }
-        setCurrentFrameIndex(frameIndexRef.current);
+        setCurrentFrameIndex(frame.index);
       }
 
-      rafRef.current = requestAnimationFrame(animate);
+      frame.raf = requestAnimationFrame(tick);
     };
 
-    rafRef.current = requestAnimationFrame(animate);
+    frameStateRef.current.raf = requestAnimationFrame(tick);
 
     return () => {
-      if (rafRef.current !== null) {
-        cancelAnimationFrame(rafRef.current);
-        rafRef.current = null;
+      if (frameStateRef.current.raf !== null) {
+        cancelAnimationFrame(frameStateRef.current.raf);
+        frameStateRef.current.raf = null;
       }
     };
   }, [isLoaded, frameRange.start, frameRange.end]);
 
-  const handleMouseDown = (e: React.MouseEvent) => {
-    e.preventDefault();
+  const handlePointerDown = (clientX: number, clientY: number) => {
     setIsDragging(true);
-    hasMovedRef.current = false;
-    dragStartRef.current = { x: e.clientX, y: e.clientY };
-    positionStartRef.current = { ...position };
+    dragStateRef.current = {
+      active: true,
+      startX: clientX,
+      startY: clientY,
+      originX: position.x,
+      originY: position.y,
+      moved: false,
+    };
   };
 
   useEffect(() => {
     if (!isDragging) return;
 
-    const handleMouseMove = (e: MouseEvent) => {
-      const dx = e.clientX - dragStartRef.current.x;
-      const dy = e.clientY - dragStartRef.current.y;
+    const handlePointerMove = (clientX: number, clientY: number) => {
+      const drag = dragStateRef.current;
+      const dx = clientX - drag.startX;
+      const dy = clientY - drag.startY;
+
       if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
-        hasMovedRef.current = true;
+        drag.moved = true;
       }
+
       setPosition({
-        x: positionStartRef.current.x - dx,
-        y: positionStartRef.current.y - dy,
+        x: drag.originX - dx,
+        y: drag.originY - dy,
       });
     };
 
-    const handleMouseUp = () => {
+    const handlePointerUp = () => {
       setIsDragging(false);
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseup", handleMouseUp);
-
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", handleMouseUp);
-    };
-  }, [isDragging, position]);
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    const touch = e.touches[0];
-    setIsDragging(true);
-    hasMovedRef.current = false;
-    dragStartRef.current = { x: touch.clientX, y: touch.clientY };
-    positionStartRef.current = { ...position };
-  };
-
-  useEffect(() => {
-    if (!isDragging) return;
-
-    const handleTouchMove = (e: TouchEvent) => {
+    const onMouseMove = (e: MouseEvent) => handlePointerMove(e.clientX, e.clientY);
+    const onMouseUp = () => handlePointerUp();
+    const onTouchMove = (e: TouchEvent) => {
       const touch = e.touches[0];
-      const dx = touch.clientX - dragStartRef.current.x;
-      const dy = touch.clientY - dragStartRef.current.y;
-      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
-        hasMovedRef.current = true;
-      }
-      setPosition({
-        x: positionStartRef.current.x - dx,
-        y: positionStartRef.current.y - dy,
-      });
+      handlePointerMove(touch.clientX, touch.clientY);
     };
+    const onTouchEnd = () => handlePointerUp();
 
-    const handleTouchEnd = () => {
-      setIsDragging(false);
-    };
-
-    window.addEventListener("touchmove", handleTouchMove, { passive: true });
-    window.addEventListener("touchend", handleTouchEnd);
+    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("mouseup", onMouseUp);
+    window.addEventListener("touchmove", onTouchMove, { passive: true });
+    window.addEventListener("touchend", onTouchEnd);
 
     return () => {
-      window.removeEventListener("touchmove", handleTouchMove);
-      window.removeEventListener("touchend", handleTouchEnd);
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("mouseup", onMouseUp);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchend", onTouchEnd);
     };
-  }, [isDragging, position]);
+  }, [isDragging]);
 
   const handleClick = () => {
-    if (!hasMovedRef.current) {
+    if (!dragStateRef.current.moved) {
       onChange(state === "working" ? "resting" : "working");
     }
   };
@@ -200,8 +189,11 @@ export default function AnimatedSticker({
 
       <button
         type="button"
-        onMouseDown={handleMouseDown}
-        onTouchStart={handleTouchStart}
+        onMouseDown={(e) => handlePointerDown(e.clientX, e.clientY)}
+        onTouchStart={(e) => {
+          const touch = e.touches[0];
+          handlePointerDown(touch.clientX, touch.clientY);
+        }}
         onClick={handleClick}
         onKeyDown={handleKeyDown}
         className="relative h-24 w-24 overflow-hidden rounded-full border border-white/20 bg-white/50 shadow-[0_10px_30px_-8px_rgba(0,0,0,0.25)] backdrop-blur-2xl transition-all duration-200 hover:scale-105 active:scale-95 dark:bg-slate-900/60"
