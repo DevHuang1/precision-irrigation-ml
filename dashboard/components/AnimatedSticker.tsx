@@ -1,18 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { animate, JSAnimation } from "animejs";
 
 export type StickerState = "resting" | "working";
 
 const TOTAL_FRAMES = 10;
-const ROWS = 2;
-const COLS = 5;
-
-function getFrameCoords(frameIndex: number) {
-  const col = frameIndex % COLS;
-  const row = Math.floor(frameIndex / COLS);
-  return { col, row };
-}
 
 export default function AnimatedSticker({
   state,
@@ -22,7 +15,9 @@ export default function AnimatedSticker({
   onChange: (next: StickerState) => void;
 }) {
   const [isHovered, setIsHovered] = useState(false);
-  const [currentFrame, setCurrentFrame] = useState(0);
+  const imgRef = useRef<HTMLImageElement>(null);
+  const animRef = useRef<JSAnimation | null>(null);
+  const frameRef = useRef({ value: 0 });
 
   const frameRange = useMemo(() => {
     if (state === "resting") {
@@ -32,26 +27,40 @@ export default function AnimatedSticker({
   }, [state]);
 
   useEffect(() => {
-    setCurrentFrame(frameRange.start);
+    frameRef.current.value = frameRange.start;
+    if (imgRef.current) {
+      imgRef.current.src = `/sticker-frames/frame_${String(frameRange.start).padStart(2, '0')}.png`;
+    }
   }, [state, frameRange.start]);
 
   useEffect(() => {
-    if (!isHovered) return;
-    const interval = setInterval(() => {
-      setCurrentFrame((prev) => {
-        const next = prev + 1;
-        if (next > frameRange.end) {
-          return frameRange.start;
-        }
-        return next;
-      });
-    }, 180);
-    return () => clearInterval(interval);
-  }, [isHovered, frameRange.start, frameRange.end]);
+    if (!imgRef.current) return;
 
-  const frameWidth = 1536 / COLS;
-  const frameHeight = 1024 / ROWS;
-  const { col, row } = getFrameCoords(currentFrame);
+    animRef.current?.pause();
+
+    if (!isHovered) {
+      frameRef.current.value = frameRange.start;
+      imgRef.current.src = `/sticker-frames/frame_${String(frameRange.start).padStart(2, '0')}.png`;
+      return;
+    }
+
+    animRef.current = animate(frameRef.current, {
+      value: frameRange.end + 1,
+      duration: (frameRange.end - frameRange.start + 1) * 180,
+      easing: "linear",
+      loop: true,
+      update: () => {
+        const frameIndex = Math.floor(frameRef.current.value);
+        const actualFrame = frameRange.start + (frameIndex - frameRange.start) % (frameRange.end - frameRange.start + 1);
+        const paddedIndex = String(actualFrame).padStart(2, '0');
+        imgRef.current!.src = `/sticker-frames/frame_${paddedIndex}.png`;
+      },
+    });
+
+    return () => {
+      animRef.current?.pause();
+    };
+  }, [isHovered, frameRange.start, frameRange.end]);
 
   const label = state === "working" ? "Researcher is working" : "Researcher is resting";
 
@@ -77,18 +86,12 @@ export default function AnimatedSticker({
         className="relative h-24 w-24 overflow-hidden rounded-full border border-white/20 bg-white/50 shadow-[0_10px_30px_-8px_rgba(0,0,0,0.25)] backdrop-blur-2xl transition-all duration-200 hover:scale-105 active:scale-95 dark:bg-slate-900/60"
         aria-label={`Switch to ${state === "working" ? "resting" : "working"} mode`}
       >
-        <div
-          className="absolute inset-0 bg-no-repeat"
-          style={{
-            width: `${frameWidth}px`,
-            height: `${frameHeight}px`,
-            backgroundImage: "url(/me.png)",
-            backgroundPosition: `-${col * frameWidth}px -${row * frameHeight}px`,
-            backgroundSize: `${COLS * frameWidth}px ${ROWS * frameHeight}px`,
-            transform: "scale(0.8)",
-            transformOrigin: "center",
-            imageRendering: "auto",
-          }}
+        <img
+          ref={imgRef}
+          src={`/sticker-frames/frame_${String(frameRange.start).padStart(2, '0')}.png`}
+          alt="Sticker"
+          className="h-full w-full object-cover"
+          draggable={false}
         />
       </button>
     </div>
