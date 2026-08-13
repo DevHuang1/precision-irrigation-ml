@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import ResearchSidebar from "@/components/ResearchSidebar";
+import StickerToggle from "@/components/StickerToggle";
 
 export const metadata: Metadata = {
   title: "Precision Irrigation Dashboard",
@@ -19,6 +20,7 @@ export default function RootLayout({
         <main className="min-h-screen transition-all duration-300 pt-16 md:pt-0 md:pl-72">
           {children}
         </main>
+        <StickerToggle />
       </body>
     </html>
   );

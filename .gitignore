@@ -11,3 +11,4 @@ results/*.png
 edge/exported/*.joblib
 edge/exported/*.onnx
 .ipynb_checkpoints/
+me.png
