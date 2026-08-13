@@ -58,6 +58,7 @@ function titleCase(s: string): string {
 
 import ProjectProgressBanner from "@/components/ProjectProgressBanner";
 import { GlassCard } from "@/components/GlassCard";
+import RawDataExplorer from "@/components/RawDataExplorer";
 
 export default function Home() {
   const [raw, setRaw] = useState<RawPayload | null>(null);
@@ -472,6 +473,10 @@ export default function Home() {
               </span>
             </div>
           </GlassCard>
+        </section>
+
+        <section className="mb-6">
+          <RawDataExplorer datasetId={datasetId} />
         </section>
 
         <section className="mb-6">

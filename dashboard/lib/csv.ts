@@ -40,7 +40,7 @@ function splitCsvLines(text: string): string[] {
   return lines;
 }
 
-function splitCsvRow(line: string): string[] {
+export function splitCsvRow(line: string): string[] {
   const cells: string[] = [];
   let cur = "";
   let inQuotes = false;
