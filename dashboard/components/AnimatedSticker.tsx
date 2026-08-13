@@ -35,11 +35,7 @@ export default function AnimatedSticker({
     moved: false,
   });
 
-  const frameStateRef = useRef({
-    index: 0,
-    lastTick: 0,
-    raf: null as number | null,
-  });
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const frameRange = useMemo(() => {
     if (state === "resting") {
@@ -52,8 +48,6 @@ export default function AnimatedSticker({
   const frameHeight = Math.floor(1024 / ROWS);
 
   useEffect(() => {
-    frameStateRef.current.index = frameRange.start;
-    frameStateRef.current.lastTick = 0;
     setCurrentFrameIndex(frameRange.start);
   }, [state, frameRange.start]);
 
@@ -67,31 +61,24 @@ export default function AnimatedSticker({
   useEffect(() => {
     if (!isLoaded) return;
 
-    const tick = (timestamp: number) => {
-      const frame = frameStateRef.current;
-      if (!frame.lastTick) {
-        frame.lastTick = timestamp;
-      }
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
 
-      const elapsed = timestamp - frame.lastTick;
-      if (elapsed >= 400) {
-        frame.lastTick = timestamp - (elapsed % 400);
-        frame.index += 1;
-        if (frame.index > frameRange.end) {
-          frame.index = frameRange.start;
+    intervalRef.current = setInterval(() => {
+      setCurrentFrameIndex((prev) => {
+        const next = prev + 1;
+        if (next > frameRange.end) {
+          return frameRange.start;
         }
-        setCurrentFrameIndex(frame.index);
-      }
-
-      frame.raf = requestAnimationFrame(tick);
-    };
-
-    frameStateRef.current.raf = requestAnimationFrame(tick);
+        return next;
+      });
+    }, 400);
 
     return () => {
-      if (frameStateRef.current.raf !== null) {
-        cancelAnimationFrame(frameStateRef.current.raf);
-        frameStateRef.current.raf = null;
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
       }
     };
   }, [isLoaded, frameRange.start, frameRange.end]);
