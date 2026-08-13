@@ -107,8 +107,8 @@ export default function AnimatedSticker({
         hasMovedRef.current = true;
       }
       setPosition({
-        x: positionStartRef.current.x + dx,
-        y: positionStartRef.current.y + dy,
+        x: positionStartRef.current.x - dx,
+        y: positionStartRef.current.y - dy,
       });
     };
 
@@ -144,8 +144,8 @@ export default function AnimatedSticker({
         hasMovedRef.current = true;
       }
       setPosition({
-        x: positionStartRef.current.x + dx,
-        y: positionStartRef.current.y + dy,
+        x: positionStartRef.current.x - dx,
+        y: positionStartRef.current.y - dy,
       });
     };
 
