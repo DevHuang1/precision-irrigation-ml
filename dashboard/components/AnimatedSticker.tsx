@@ -21,9 +21,9 @@ export default function AnimatedSticker({
 
   const frameRange = useMemo(() => {
     if (state === "resting") {
-      return { start: 0, end: 4 };
+      return { start: 5, end: 9 };
     }
-    return { start: 5, end: 9 };
+    return { start: 0, end: 4 };
   }, [state]);
 
   useEffect(() => {
