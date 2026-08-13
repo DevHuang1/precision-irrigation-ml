@@ -28,7 +28,7 @@ export default function AnimatedSticker({
   });
 
   const label =
-    state === "working" ? "Researcher is working" : "Researcher is resting";
+    state === "working" ? "🔥 Researcher is working" : "💤 Researcher is resting";
 
   const handlePointerDown = (e: React.PointerEvent) => {
     dragState.current = {
