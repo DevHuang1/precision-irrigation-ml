@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { animate, JSAnimation } from "animejs";
 
 export type StickerState = "resting" | "working";
 
@@ -16,8 +15,8 @@ export default function AnimatedSticker({
 }) {
   const [isHovered, setIsHovered] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
-  const animRef = useRef<JSAnimation | null>(null);
-  const frameRef = useRef({ value: 0 });
+  const frameIndexRef = useRef(0);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const frameRange = useMemo(() => {
     if (state === "resting") {
@@ -27,38 +26,42 @@ export default function AnimatedSticker({
   }, [state]);
 
   useEffect(() => {
-    frameRef.current.value = frameRange.start;
+    frameIndexRef.current = frameRange.start;
     if (imgRef.current) {
       imgRef.current.src = `/sticker-frames/frame_${String(frameRange.start).padStart(2, '0')}.png`;
     }
   }, [state, frameRange.start]);
 
   useEffect(() => {
-    if (!imgRef.current) return;
-
-    animRef.current?.pause();
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
 
     if (!isHovered) {
-      frameRef.current.value = frameRange.start;
-      imgRef.current.src = `/sticker-frames/frame_${String(frameRange.start).padStart(2, '0')}.png`;
+      frameIndexRef.current = frameRange.start;
+      if (imgRef.current) {
+        imgRef.current.src = `/sticker-frames/frame_${String(frameRange.start).padStart(2, '0')}.png`;
+      }
       return;
     }
 
-    animRef.current = animate(frameRef.current, {
-      value: frameRange.end + 1,
-      duration: (frameRange.end - frameRange.start + 1) * 180,
-      easing: "linear",
-      loop: true,
-      update: () => {
-        const frameIndex = Math.floor(frameRef.current.value);
-        const actualFrame = frameRange.start + (frameIndex - frameRange.start) % (frameRange.end - frameRange.start + 1);
-        const paddedIndex = String(actualFrame).padStart(2, '0');
-        imgRef.current!.src = `/sticker-frames/frame_${paddedIndex}.png`;
-      },
-    });
+    intervalRef.current = setInterval(() => {
+      frameIndexRef.current += 1;
+      if (frameIndexRef.current > frameRange.end) {
+        frameIndexRef.current = frameRange.start;
+      }
+      if (imgRef.current) {
+        const paddedIndex = String(frameIndexRef.current).padStart(2, '0');
+        imgRef.current.src = `/sticker-frames/frame_${paddedIndex}.png`;
+      }
+    }, 180);
 
     return () => {
-      animRef.current?.pause();
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
     };
   }, [isHovered, frameRange.start, frameRange.end]);
 
