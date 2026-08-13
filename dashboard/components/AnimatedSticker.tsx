@@ -18,6 +18,7 @@ export default function AnimatedSticker({
   const [isDragging, setIsDragging] = useState(false);
   const dragStartRef = useRef({ x: 0, y: 0 });
   const positionStartRef = useRef({ x: 0, y: 0 });
+  const hasMovedRef = useRef(false);
   const imgRef = useRef<HTMLImageElement>(null);
   const frameIndexRef = useRef(0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -66,6 +67,7 @@ export default function AnimatedSticker({
   const handleMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
     setIsDragging(true);
+    hasMovedRef.current = false;
     dragStartRef.current = { x: e.clientX, y: e.clientY };
     positionStartRef.current = { ...position };
   };
@@ -76,6 +78,9 @@ export default function AnimatedSticker({
     const handleMouseMove = (e: MouseEvent) => {
       const dx = e.clientX - dragStartRef.current.x;
       const dy = e.clientY - dragStartRef.current.y;
+      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+        hasMovedRef.current = true;
+      }
       setPosition({
         x: positionStartRef.current.x + dx,
         y: positionStartRef.current.y + dy,
@@ -94,6 +99,12 @@ export default function AnimatedSticker({
       window.removeEventListener("mouseup", handleMouseUp);
     };
   }, [isDragging]);
+
+  const handleClick = () => {
+    if (!hasMovedRef.current) {
+      onChange(state === "working" ? "resting" : "working");
+    }
+  };
 
   const label = state === "working" ? "Researcher is working" : "Researcher is resting";
 
@@ -119,7 +130,7 @@ export default function AnimatedSticker({
 
       <button
         type="button"
-        onClick={() => onChange(state === "working" ? "resting" : "working")}
+        onClick={handleClick}
         className="relative h-24 w-24 overflow-hidden rounded-full border border-white/20 bg-white/50 shadow-[0_10px_30px_-8px_rgba(0,0,0,0.25)] backdrop-blur-2xl transition-all duration-200 hover:scale-105 active:scale-95 dark:bg-slate-900/60"
         aria-label={`Switch to ${state === "working" ? "resting" : "working"} mode`}
         style={{ cursor: isDragging ? "grabbing" : "pointer" }}
