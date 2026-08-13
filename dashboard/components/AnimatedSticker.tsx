@@ -21,10 +21,10 @@ export default function AnimatedSticker({
   state: StickerState;
   onChange: (next: StickerState) => void;
 }) {
-  const [isHovered, setIsHovered] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [currentFrameIndex, setCurrentFrameIndex] = useState(0);
 
   const dragStartRef = useRef({ x: 0, y: 0 });
   const positionStartRef = useRef({ x: 0, y: 0 });
@@ -42,11 +42,11 @@ export default function AnimatedSticker({
 
   const frameWidth = 1536 / COLS;
   const frameHeight = 1024 / ROWS;
-  const { col, row } = getFrameCoords(frameRange.start);
 
   useEffect(() => {
     frameIndexRef.current = frameRange.start;
     lastTickRef.current = 0;
+    setCurrentFrameIndex(frameRange.start);
   }, [state, frameRange.start]);
 
   useEffect(() => {
@@ -64,7 +64,7 @@ export default function AnimatedSticker({
         lastTickRef.current = timestamp;
       }
 
-      const speed = isHovered ? 180 : 400;
+      const speed = 400;
       const elapsed = timestamp - lastTickRef.current;
 
       if (elapsed >= speed) {
@@ -73,6 +73,7 @@ export default function AnimatedSticker({
         if (frameIndexRef.current > frameRange.end) {
           frameIndexRef.current = frameRange.start;
         }
+        setCurrentFrameIndex(frameIndexRef.current);
       }
 
       rafRef.current = requestAnimationFrame(animate);
@@ -86,7 +87,7 @@ export default function AnimatedSticker({
         rafRef.current = null;
       }
     };
-  }, [isLoaded, isHovered, frameRange.start, frameRange.end]);
+  }, [isLoaded, frameRange.start, frameRange.end]);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -174,7 +175,7 @@ export default function AnimatedSticker({
     }
   };
 
-  const currentFrame = getFrameCoords(frameIndexRef.current);
+  const currentFrame = getFrameCoords(currentFrameIndex);
   const label = state === "working" ? "Researcher is working" : "Researcher is resting";
 
   return (
@@ -186,14 +187,12 @@ export default function AnimatedSticker({
         cursor: isDragging ? "grabbing" : "grab",
         touchAction: "none",
       }}
-      onMouseDown={handleMouseDown}
-      onTouchStart={handleTouchStart}
     >
       <div
-        className="rounded-2xl border border-white/10 bg-white/55 px-3 py-1.5 text-xs font-medium text-slate-800 shadow-[0_8px_24px_-6px_rgba(0,0,0,0.18)] backdrop-blur-xl transition-all duration-200 dark:bg-slate-900/70 dark:text-slate-100"
+        className="rounded-2xl border border-white/10 bg-white/55 px-3 py-1.5 text-xs font-medium text-slate-800 shadow-[0_8px_24px_-6px_rgba(0,0,0,0.18)] backdrop-blur-xl transition-all duration-200 dark:bg-slate-900/70 dark:text-slate-100 select-none"
         style={{
-          opacity: isHovered ? 1 : 0.85,
-          transform: isHovered ? "translateY(-4px)" : "translateY(0)",
+          opacity: isDragging ? 0.9 : 0.85,
+          transform: isDragging ? "translateY(-2px)" : "translateY(0)",
         }}
       >
         {label}
@@ -201,6 +200,8 @@ export default function AnimatedSticker({
 
       <button
         type="button"
+        onMouseDown={handleMouseDown}
+        onTouchStart={handleTouchStart}
         onClick={handleClick}
         onKeyDown={handleKeyDown}
         className="relative h-24 w-24 overflow-hidden rounded-full border border-white/20 bg-white/50 shadow-[0_10px_30px_-8px_rgba(0,0,0,0.25)] backdrop-blur-2xl transition-all duration-200 hover:scale-105 active:scale-95 dark:bg-slate-900/60"
