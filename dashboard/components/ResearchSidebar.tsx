@@ -30,13 +30,11 @@ export type NavItem = (typeof NAV_ITEMS)[number];
 
 interface ResearchSidebarProps {
   initialCollapsed?: boolean;
-  onLogout?: () => void;
   className?: string;
 }
 
 export default function ResearchSidebar({
   initialCollapsed = false,
-  onLogout,
   className = "",
 }: ResearchSidebarProps) {
   const pathname = usePathname();
@@ -110,7 +108,6 @@ export default function ResearchSidebar({
                 pathname={pathname}
                 isCollapsed={false}
                 onToggleCollapse={() => setIsMobileOpen(false)}
-                onLogout={onLogout}
                 theme={theme}
                 onToggleTheme={toggleTheme}
                 isMobile
@@ -134,7 +131,6 @@ export default function ResearchSidebar({
           pathname={pathname}
           isCollapsed={isCollapsed}
           onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
-          onLogout={onLogout}
           theme={theme}
           onToggleTheme={toggleTheme}
         />
@@ -147,7 +143,6 @@ function SidebarContent({
   pathname,
   isCollapsed,
   onToggleCollapse,
-  onLogout,
   theme,
   onToggleTheme,
   isMobile = false,
@@ -155,7 +150,6 @@ function SidebarContent({
   pathname: string;
   isCollapsed: boolean;
   onToggleCollapse: () => void;
-  onLogout?: () => void;
   theme: "light" | "dark";
   onToggleTheme: () => void;
   isMobile?: boolean;
