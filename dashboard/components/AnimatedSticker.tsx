@@ -93,7 +93,7 @@ export default function AnimatedSticker({
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [isDragging, position]);
+  }, [isDragging]);
 
   const label = state === "working" ? "Researcher is working" : "Researcher is resting";
 
@@ -101,8 +101,8 @@ export default function AnimatedSticker({
     <div
       className="fixed z-50 flex flex-col items-end gap-2"
       style={{
-        left: `calc(100% - ${96 + position.x}px)`,
-        top: `calc(100% - ${96 + position.y}px)`,
+        right: `${96 + position.x}px`,
+        bottom: `${96 + position.y}px`,
         cursor: isDragging ? "grabbing" : "grab",
       }}
       onMouseDown={handleMouseDown}
